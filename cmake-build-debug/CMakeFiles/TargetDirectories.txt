@@ -1,3 +1,0 @@
-/home/tj/Dokumenty/timak/mdpc-gf-p/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/tj/Dokumenty/timak/mdpc-gf-p/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/tj/Dokumenty/timak/mdpc-gf-p/cmake-build-debug/CMakeFiles/mceliece_qcmdpc_gf_p.dir

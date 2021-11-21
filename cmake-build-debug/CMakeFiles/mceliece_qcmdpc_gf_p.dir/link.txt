@@ -1,1 +1,0 @@
-/usr/lib64/ccache/c++ -g CMakeFiles/mceliece_qcmdpc_gf_p.dir/main.cpp.o CMakeFiles/mceliece_qcmdpc_gf_p.dir/src/code/code.cpp.o CMakeFiles/mceliece_qcmdpc_gf_p.dir/src/protocol/protocol.cpp.o -o mceliece_qcmdpc_gf_p  -Wl,-rpath,/usr/local/lib /usr/local/lib/libntl.so 
