@@ -24,47 +24,47 @@ class Code {
 private:
 	const long q; // power of 2
 	const long k; // length of cyclic block (H)
-    ZZ_pX modulus; // x^k - 1
+	ZZ_pX modulus; // x^k - 1
 
 	// matrices represented by polynomials
 	ZZ_pX h0, h0_inverse, h1;
 	ZZ_pX g;
-    ZZ_pX g_transpose; // TODO: consider this approach vs matrix, remove if appropriate
+	ZZ_pX g_transpose; // TODO: consider this approach vs matrix, remove if appropriate
 
-    // matrix
-    mat_ZZ_p G;
+	// matrix
+	mat_ZZ_p G;
 
 	/**
 	 * @brief Generate a polynomial mod (x^k - 1) with coefficients drawn from I1 and sum equal to 0.
 	 * 
 	 * @return vec_ZZ_p 
 	 */
-    [[nodiscard]] auto generate_random_poly() const -> ZZ_pX;
+	[[nodiscard]] auto generate_random_poly() const -> ZZ_pX;
 
-    /**
-     * @brief Set h0 and h0_inverse polynomials.
-     *
-     * h0 polynomial represents the left block of parity-check matrix. It is calculated as follows:
-     * 1) generate a random polynomial using @see Code::generate_random_poly()
-     * 2) calculate significant entry as round(q/3)
-     * 3) add significant entry to the first coefficient of h0
-     * 4) if h0 is not invertible go to 1)
-     * 5) set h0_inverse to h0^-1
-     */
+	/**
+	 * @brief Set h0 and h0_inverse polynomials.
+	 *
+	 * h0 polynomial represents the left block of parity-check matrix. It is calculated as follows:
+	 * 1) generate a random polynomial using @see Code::generate_random_poly()
+	 * 2) calculate significant entry as round(q/3)
+	 * 3) add significant entry to the first coefficient of h0
+	 * 4) if h0 is not invertible go to 1)
+	 * 5) set h0_inverse to h0^-1
+	 */
 	auto generate_h0() -> void;
 
-    /**
-     * @brief Set h1 polynomial.
-     *
-     * h0 polynomial represents the left block of parity-check matrix. It is calculated as follows:
-     * 1) generate a random polynomial using @see Code::generate_random_poly()
-     * 2) calculate significant entry as round(q/1)
-     * 3) add significant entry to the first coefficient of h1
-     */
+	/**
+	 * @brief Set h1 polynomial.
+	 *
+	 * h0 polynomial represents the left block of parity-check matrix. It is calculated as follows:
+	 * 1) generate a random polynomial using @see Code::generate_random_poly()
+	 * 2) calculate significant entry as round(q/1)
+	 * 3) add significant entry to the first coefficient of h1
+	 */
 	auto generate_h1() -> void;
 
 
-    // TODO: this
+	// TODO: this
 	// auto generate_private_key() -> void;
 
 	/**
@@ -78,16 +78,16 @@ private:
 	auto generate_G() -> void;
 
 
-    // TODO: implement
+	// TODO: implement
 	auto calculate_syndrome(const vec_ZZ_p& message) -> vec_ZZ_p;
 
 public:
-    /**
-     * @brief Construct an instance of Code.
-     *
-     * @param q unsigned, ideally a power of 2
-     * @param k unsigned, ideally an odd prime
-     */
+	/**
+	 * @brief Construct an instance of Code.
+	 *
+	 * @param q unsigned, ideally a power of 2
+	 * @param k unsigned, ideally an odd prime
+	 */
 	Code(unsigned q, unsigned k);
 
 	/**
@@ -101,10 +101,10 @@ public:
 	 */
 	[[nodiscard]] auto encode(const vec_ZZ_p& message) const -> vec_ZZ_p;
 
-    // transpose version
-    // TODO: decide if we're keeping both versions
-    // TODO: if we are keeping both versions, we should consider compile-time flag to switch between them
-    [[nodiscard]] auto encode_with_transpose(const vec_ZZ_p& message) const -> vec_ZZ_p;
+	// transpose version
+	// TODO: decide if we're keeping both versions
+	// TODO: if we are keeping both versions, we should consider compile-time flag to switch between them
+	[[nodiscard]] auto encode_with_transpose(const vec_ZZ_p& message) const -> vec_ZZ_p;
 
 	// decodes message using p-ary bit-flipping
 	// returns e (error vector) or decode error
@@ -113,17 +113,17 @@ public:
 		// 1. implement decoding algorithm
 		// 2. return e or decode error
 
-    /**
-     * @brief Set h0, h0_inverse, h1, g and G.
-     *
-     * @todo in the current implementation, this also sets g_transpose
-     */
+	/**
+	 * @brief Set h0, h0_inverse, h1, g and G.
+	 *
+	 * @todo in the current implementation, this also sets g_transpose
+	 */
 	auto init_keys() -> void;
 
 // GETTERS
 
 	[[nodiscard]] auto get_g() const -> const ZZ_pX&;
-    [[nodiscard]] auto get_G() const -> const mat_ZZ_p&;
+	[[nodiscard]] auto get_G() const -> const mat_ZZ_p&;
 	[[nodiscard]] auto get_k() const -> long;
 	[[nodiscard]] auto get_q() const -> long;
 };
