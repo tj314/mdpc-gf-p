@@ -1,4 +1,5 @@
 #include "code.hpp"
+#include <cstddef>
 
 /*-----------*\
  CONSTRUCTORS
@@ -32,6 +33,27 @@ Code::Code(unsigned q, unsigned k) : q((long)q), k((long)k) {
 
 auto Code::generate_random_poly() const -> ZZ_pX {
 	vector<long> vec;
+
+	long num_ones = RandomBnd(k/2); // given sum has to be 0, there can be at most k/2 ones
+	for (long i = 0; i < num_ones; ++i) {
+		vec.push_back(1);
+		vec.push_back(-1);
+	}
+	for (long i = 0; i < k - 2 * num_ones; ++i)
+		vec.push_back(0);
+	vec.resize(k,0);
+
+	// now, sum of vec is 0, but it is 1,-1,1,-1,...,0,0,0,0 which is not very random
+	// therefore, we have to shuffle it
+
+	long num_swaps = RandomBnd(k);
+	for (long i = 0; i < num_swaps; ++i) {
+		long idx1 = RandomBnd(k);
+		long idx2 = RandomBnd(k);
+		swap(vec[idx1], vec[idx2]);
+	}
+
+	/*
 	long sum = 0;
 	for (size_t i = 0; i < (size_t)k; ++i) {
 		long tmp = RandomBnd(3L) - 1;
@@ -46,6 +68,7 @@ auto Code::generate_random_poly() const -> ZZ_pX {
 		sum += tmp;
 		vec[idx] = tmp;
 	}
+	*/
 
 	ZZ_pX out;
 	for (size_t i = 0; i < (size_t)k; ++i)
@@ -85,10 +108,8 @@ auto Code::generate_G() -> void {
 		g = MulByXMod(g, modulus);
 	}
 
-	// for transpose:
-	SetCoeff(g_transpose, 0, ZZ_p{coeff(g, 0)});
-	for (long i = 1; i < k; ++i)
-		SetCoeff(g_transpose, i, ZZ_p{coeff(g, k - i)});
+	// for encoding w/0 matrix
+	g_coeffs = VectorCopy(g, k);
 }
 
 
@@ -102,15 +123,20 @@ auto Code::calculate_syndrome(const vec_ZZ_p& message) -> vec_ZZ_p {
 	return message;
 }
 
-auto Code::encode_with_transpose(const vec_ZZ_p& message) const -> vec_ZZ_p {
+auto Code::encode_with_coeffs(const vec_ZZ_p& message) const -> vec_ZZ_p {
 	if (message.length() != k)
 		throw invalid_argument("Code::encode_with_transpose: Given message is not of length k!");
 	vec_ZZ_p encoded = VectorCopy(message, k);
-	vec_ZZ_p coeffs;
 	for (long i = 0; i < k; ++i) {
-		coeffs = VectorCopy(g_transpose, k);
-		g_transpose = MulByXMod(g_transpose, modulus);
-		encoded.append(message * coeffs);
+		long curr_offset = i;
+		ZZ_p sum{0};
+		for (long j = 0; j < k; ++j) {
+			sum += message[j] * g_coeffs[curr_offset];
+			--curr_offset;
+			if (curr_offset < 0)
+				curr_offset += k;
+		}
+		encoded.append(sum);
 	}
 	return encoded;
 }
@@ -138,6 +164,14 @@ auto Code::init_keys() -> void {
 	generate_h0();
 	generate_h1();
 	generate_G();
+
+	/*
+	cout << "KEY INIT" << endl;
+	cout << "\th0    : " << h0 << endl;
+	cout << "\th0 inv: " << h0_inverse << endl;
+	cout << "\th1    : " << h1 << endl;
+	cout << "\tg     : " << g_coeffs << endl;
+	*/
 }
 
 auto Code::get_g() const -> const ZZ_pX& {

@@ -2,6 +2,7 @@
 #define MCELIECE_QCMDPC_GF_P_CODE_HPP
 
 #include <vector>
+#include <algorithm>
 #include <iostream>
 #include <cmath>
 #include <stdexcept>
@@ -29,7 +30,7 @@ private:
 	// matrices represented by polynomials
 	ZZ_pX h0, h0_inverse, h1;
 	ZZ_pX g;
-	ZZ_pX g_transpose; // TODO: consider this approach vs matrix, remove if appropriate
+	vec_ZZ_p g_coeffs; // TODO: consider this approach vs matrix, remove if appropriate
 
 	// matrix
 	mat_ZZ_p G;
@@ -73,7 +74,7 @@ private:
 	 * polynomial g = h0^-1 * h1 represents the right block of generating matrix.
 	 * Matrix G in this class represents the right block of generating matrix. It is a cyclic matrix whose first block is determined by the coefficients of polynomial g.
 	 *
-	 * @todo right now, the g_transpose is also set here. Update the documentation accordingly.
+	 * @todo right now, the g_coeffs is also set here. Update the documentation accordingly.
 	 */
 	auto generate_G() -> void;
 
@@ -101,10 +102,10 @@ public:
 	 */
 	[[nodiscard]] auto encode(const vec_ZZ_p& message) const -> vec_ZZ_p;
 
-	// transpose version
+	// coeffs version
 	// TODO: decide if we're keeping both versions
 	// TODO: if we are keeping both versions, we should consider compile-time flag to switch between them
-	[[nodiscard]] auto encode_with_transpose(const vec_ZZ_p& message) const -> vec_ZZ_p;
+	[[nodiscard]] auto encode_with_coeffs(const vec_ZZ_p& message) const -> vec_ZZ_p;
 
 	// decodes message using p-ary bit-flipping
 	// returns e (error vector) or decode error
@@ -116,7 +117,7 @@ public:
 	/**
 	 * @brief Set h0, h0_inverse, h1, g and G.
 	 *
-	 * @todo in the current implementation, this also sets g_transpose
+	 * @todo in the current implementation, this also sets g_coeffs
 	 */
 	auto init_keys() -> void;
 

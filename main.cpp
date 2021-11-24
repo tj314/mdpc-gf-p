@@ -14,7 +14,7 @@ auto main() -> int {
 	cout << "Message: " << m << endl;
 	try {
 		cout << "Encoded1:" << code.encode(m) << endl;
-		cout << "Encoded2:" << code.encode_with_transpose(m) << endl;
+		cout << "Encoded2:" << code.encode_with_coeffs(m) << endl;
 	} catch(const invalid_argument& ex) {
 		cerr << ex.what() << endl;
 	}
