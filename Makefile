@@ -10,7 +10,7 @@ CXX := g++
 CXXFLAGS := -std=c++17 -Wall -Werror -Wextra
 
 CPPFLAGS := -I/usr/include/flint -Iinclude -MMD -MP # -MDD -MP generate header deps automatically
-LDFLAGS := -lflint
+LDFLAGS := -lflint -lgmp
 
 .PHONY: all clean
 
@@ -29,3 +29,5 @@ clean:
 	@$(RM) -rv $(BIN_DIR) $(OBJ_DIR)
 
 -include $(OBJ:.o=.d)
+
+# this Makefile was largely taken from here https://stackoverflow.com/a/30602701
