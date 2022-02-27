@@ -1,10 +1,8 @@
-#include <flintxx.h>
-#include <fmpqxx.h>
-
-using namespace flint;
+#include "code.hpp"
+#include "random.hpp"
 
 auto main() -> int {
-	// auto q = fmpqxx{3, 5};
-	auto q = fmpqxx();
-	return 0;
+    Random r;
+    Code c{16, 23, r};
+    return 0;
 }
