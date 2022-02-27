@@ -1,5 +1,15 @@
 #include "random.hpp"
 
+#ifdef BACKEND_C
+Random::Random() {
+    srand(time(NULL));
+}
+
+auto Random::random_index(unsigned bound) -> unsigned {
+    return rand() % bound;
+}
+
+#else
 Random::Random() {
     flint_randinit(rnd);
     fmpz_init(tmp);
@@ -17,3 +27,4 @@ auto Random::random_index(unsigned bound) -> unsigned {
     fmpz_randm(tmp, rnd, this->bound);
     return fmpz_get_ui(tmp);
 }
+#endif
