@@ -34,41 +34,21 @@ Code::Code(unsigned q, unsigned k) : q((long)q), k((long)k) {
 auto Code::generate_random_poly() const -> ZZ_pX {
 	vector<long> vec;
 
-	long num_ones = RandomBnd(k/2); // given sum has to be 0, there can be at most k/2 ones
-	for (long i = 0; i < num_ones; ++i) {
-		vec.push_back(1);
-		vec.push_back(-1);
-	}
-	for (long i = 0; i < k - 2 * num_ones; ++i)
-		vec.push_back(0);
-	vec.resize(k,0);
+	long num_ones = k/3;
 
-	// now, sum of vec is 0, but it is 1,-1,1,-1,...,0,0,0,0 which is not very random
+    for (long i = 0; i < num_ones; ++i) vec.push_back(1);
+    for (long i = num_ones; i < 2*num_ones; ++i) vec.push_back(-1);
+    for (long i = 2*num_ones; i < k; ++i) vec.push_back(0);
+    
+    vec.resize(k,0);
+
+	// now, sum of vec is 0, but it is 1,1,1,...,-1,-1,-1,...,0,0,0 which is not very random
 	// therefore, we have to shuffle it
 
-	long num_swaps = RandomBnd(k);
-	for (long i = 0; i < num_swaps; ++i) {
-		long idx1 = RandomBnd(k);
-		long idx2 = RandomBnd(k);
-		swap(vec[idx1], vec[idx2]);
+	for (long i = 0; i < k-1; ++i) {
+		long j = i + RandomBnd(k-i);
+		swap(vec[i], vec[j]);
 	}
-
-	/*
-	long sum = 0;
-	for (size_t i = 0; i < (size_t)k; ++i) {
-		long tmp = RandomBnd(3L) - 1;
-		sum += tmp;
-		vec.push_back(tmp);
-	}
-	
-	while (sum != 0) {
-		long idx = RandomBnd(k);
-		long tmp = RandomBnd(3L) - 1;
-		sum -= vec[idx];
-		sum += tmp;
-		vec[idx] = tmp;
-	}
-	*/
 
 	ZZ_pX out;
 	for (size_t i = 0; i < (size_t)k; ++i)
@@ -80,15 +60,7 @@ auto Code::generate_h0() -> void {
 	double tmp = q / 3.0;
 	ZZ_pX h0_significant;
 	SetCoeff(h0_significant, 0, lround(tmp));
-	while (true) {
-		try {
-			h0 = generate_random_poly() + h0_significant;
-			h0_inverse = InvMod(h0, modulus);
-			break;
-		} catch(const InvModErrorObject& ex) {
-			continue;
-		}
-	}
+    h0 = generate_random_poly() + h0_significant;
 }
 
 auto Code::generate_h1() -> void {
