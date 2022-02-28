@@ -10,7 +10,7 @@ CXX := g++
 CXXFLAGS := -std=c++17 -Wall -Werror -Wextra
 
 CPPFLAGS := -I/usr/include/flint -Iinclude -MMD -MP # -MDD -MP generate header deps automatically
-LDFLAGS := -lflint -lgmp
+LDFLAGS := -lflint -lgmp -lm
 
 .PHONY: all clean
 
