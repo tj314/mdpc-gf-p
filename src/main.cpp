@@ -3,6 +3,6 @@
 
 auto main() -> int {
     Random r;
-    Code c{16, 17, r};
+    Code c{8, 11, r};
     return 0;
 }
