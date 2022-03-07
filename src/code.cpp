@@ -109,7 +109,7 @@ auto Code::init_keys(Random& rnd) -> void {
         // g(x) = m*f(x) mod q
         fmpq_poly_get_numerator(numerator, f);
         fmpz_mod_poly_set_fmpz_poly(g, numerator, params.ctx);
-        fmpz_mod_poly_scalar_mul_fmpz(g, g, m, params.ctx);
+        // fmpz_mod_poly_scalar_mul_fmpz(g, g, m, params.ctx);
         
         // calculate poly h(x) such that
         // h(x) = r*g(x) mod q
