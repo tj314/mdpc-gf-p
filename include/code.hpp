@@ -12,7 +12,8 @@
 
 class Code {
 private:
-    CodeParams params; // DO NOT MOVE THIS. params MUST be the first member in this class
+    CodeParams params;  // DO NOT MOVE THIS
+                        // params MUST be the first member in this class
     fmpz_mod_poly_t h0, h1, h1_inv;
     fmpq_poly_t h1_tmp;
 

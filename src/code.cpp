@@ -132,6 +132,7 @@ auto Code::init_keys(Random& rnd) -> void {
     fmpz_poly_clear(numerator);
     fmpz_mod_poly_clear(g, params.ctx);
 
+    /*
     flint_printf("h0: ");
     fmpz_mod_poly_print_pretty(h0, "x", params.ctx);
     flint_printf("\n");
@@ -151,6 +152,7 @@ auto Code::init_keys(Random& rnd) -> void {
     fmpz_mod_poly_print_pretty(tmp, "x", params.ctx);
     flint_printf("\n");
     fmpz_mod_poly_clear(tmp, params.ctx);
+    */
 };
 
 auto Code::encode() -> void {};
