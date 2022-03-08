@@ -1,6 +1,8 @@
 .idea/
 .ccls-cache/
+.cache/
 .ccls
 .vim/
 build/
 obj/
+compile_commands.json

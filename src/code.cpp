@@ -8,7 +8,7 @@
 auto CodeParams::set(unsigned q, unsigned k) -> void {
     k_value = k;
     q_value = q;
-    
+
     // http://www.graphics.stanford.edu/~seander/bithacks.html#DetermineIfPowerOf2
     if ((q & (q-1)) != 0 || q == 0) {
         // TODO: compile-time options for throwing exceptions vs printing errors
@@ -131,19 +131,19 @@ auto Code::init_keys(Random& rnd) -> void {
     fmpz_clear(s);
     fmpz_poly_clear(numerator);
     fmpz_mod_poly_clear(g, params.ctx);
-    
+
     flint_printf("h0: ");
     fmpz_mod_poly_print_pretty(h0, "x", params.ctx);
     flint_printf("\n");
-    
+
     flint_printf("h1: ");
     fmpz_mod_poly_print_pretty(h1, "x", params.ctx);
     flint_printf("\n");
-    
+
     flint_printf("h1^-1: ");
     fmpz_mod_poly_print_pretty(h1_inv, "x", params.ctx);
     flint_printf("\n");
-    
+
     fmpz_mod_poly_t tmp;
     fmpz_mod_poly_init(tmp, params.ctx);
     fmpz_mod_poly_mul(tmp, h1, h1_inv, params.ctx);
