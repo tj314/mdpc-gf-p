@@ -6,6 +6,7 @@
 #include <fmpzxx.h>
 #include <fmpz_mod_polyxx.h>
 #include <fmpq_polyxx.h>
+#include <nmod_vecxx.h>
 #include <iostream>
 #include <cmath>
 #include "random.hpp"
@@ -17,7 +18,7 @@ private:
     CodeParams params;  // DO NOT MOVE THIS
                         // params MUST be the first member in this class
     fmpz_mod_polyxx h0, h1, h1_inv;
-    // fmpq_polyxx h1_tmp;
+    fmpz_mod_polyxx mod;
 
 public:
     Code(unsigned q, unsigned k, Random& rnd);

@@ -2,6 +2,7 @@
 #include "codeparams.hpp"
 #include "flint.h"
 #include "flintxx/ltuple.h"
+#include "nmod_vecxx.h"
 
 // ==================
 // CODE PARAMS CLASS
@@ -34,7 +35,10 @@ Code::Code(unsigned q, unsigned k, Random& rnd):
     params(CodeParams{q, k}),
     h0(fmpz_mod_polyxx((this->params).context, k)),
     h1(fmpz_mod_polyxx((this->params).context, k)),
-    h1_inv(fmpz_mod_polyxx((this->params).context, k)) {
+    h1_inv(fmpz_mod_polyxx((this->params).context, k)),
+    mod(fmpz_mod_polyxx((this->params).context, k)) {
+    mod.set_coeff(0, -1);
+    mod.set_coeff(k, 1);
     init_keys(rnd);
 }
 
@@ -50,10 +54,11 @@ auto Code::init_keys(Random& rnd) -> void {
     mod.set_coeff(0, -1);
     mod.set_coeff(params.k_value, 1);
 
+
+
     while (true) {
         // coeffs from {-1, 0, 1} in Q + h1_prime added to the first coeff
         rnd.random_poly(h1_tmp, params, h1_prime);
-
         // calculate poly f(x) such that
         // f = h_1^{-1} mod (x^k - 1) in Q[x]
         auto xgcd_result = xgcd(h1_tmp, mod);
@@ -62,12 +67,11 @@ auto Code::init_keys(Random& rnd) -> void {
             // therefore f does not exist
             continue;
         }
-
         f = xgcd_result.get<1>();
         f %= mod;
 
         // let m be denominator of f
-        m = f.den()._fmpz();
+        m = f.den();
 
         // calculate r such that
         // r = m^-1 mod q
@@ -96,6 +100,7 @@ auto Code::init_keys(Random& rnd) -> void {
         h1.set_coeff(i, h1_tmp.get_coeff(i).num());
     }
     
+    /*
     auto p = h1 * h1_inv;
 
     h0.print_pretty("x");
@@ -106,6 +111,10 @@ auto Code::init_keys(Random& rnd) -> void {
     flint_printf("\n");
     p.print_pretty("x");
     flint_printf("\n");
+    */
+    fmpz_mod_polyxx p{h1_inv * h0};
+    fmpzxx scalar{-1};
+    p = scalar * p;
 };
 
 auto Code::encode() -> void {};
