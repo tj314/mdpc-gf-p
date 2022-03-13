@@ -46,7 +46,6 @@ Code::Code(unsigned q, unsigned k, Random& rnd) {
     fmpz_mod_poly_init2(h0, k, params.ctx);
     fmpz_mod_poly_init2(h1, k, params.ctx);
     fmpz_mod_poly_init2(h1_inv, k, params.ctx);
-    fmpq_poly_init2(h1_tmp, k);
 
     init_keys(rnd);
 }
@@ -55,7 +54,6 @@ Code::~Code() {
     fmpz_mod_poly_clear(h0, params.ctx);
     fmpz_mod_poly_clear(h1, params.ctx);
     fmpz_mod_poly_clear(h1_inv, params.ctx);
-    fmpq_poly_clear(h1_tmp);
 }
 
 auto Code::init_keys(Random& rnd) -> void {
@@ -63,13 +61,14 @@ auto Code::init_keys(Random& rnd) -> void {
     unsigned h1_prime = round(params.q_value / 9.0);
     rnd.random_poly(h0, params, h0_prime); // coeffs from {-1, 0, 1} in Z_q
 
-    fmpq_poly_t mod, gcd, f, T;
+    fmpq_poly_t mod, gcd, f, T, h1_tmp;
     fmpz_poly_t numerator;
     fmpz_mod_poly_t g;
     fmpz_t m, r, d, s;
     
     fmpz_poly_init(numerator);
     fmpz_mod_poly_init2(g, params.k_value, params.ctx);
+    fmpq_poly_init2(h1_tmp, params.k_value);
     fmpq_poly_init2(mod, params.k_value);
     fmpq_poly_set_coeff_si(mod, 0, - 1);
     fmpq_poly_set_coeff_si(mod, params.k_value, 1);
@@ -131,6 +130,8 @@ auto Code::init_keys(Random& rnd) -> void {
     fmpz_clear(s);
     fmpz_poly_clear(numerator);
     fmpz_mod_poly_clear(g, params.ctx);
+    fmpq_poly_clear(h1_tmp);
+
 
     /*
     flint_printf("h0: ");
