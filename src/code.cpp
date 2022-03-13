@@ -1,5 +1,7 @@
 #include "code.hpp"
 #include "codeparams.hpp"
+#include "fmpz.h"
+#include "fmpz_mod_poly.h"
 
 // ==================
 // CODE PARAMS CLASS
@@ -46,7 +48,7 @@ Code::Code(unsigned q, unsigned k, Random& rnd) {
     fmpz_mod_poly_init2(h0, k, params.ctx);
     fmpz_mod_poly_init2(h1, k, params.ctx);
     fmpz_mod_poly_init2(h1_inv, k, params.ctx);
-
+    fmpz_mod_poly_init2(second_block_G, k, params.ctx);
     init_keys(rnd);
 }
 
@@ -54,6 +56,7 @@ Code::~Code() {
     fmpz_mod_poly_clear(h0, params.ctx);
     fmpz_mod_poly_clear(h1, params.ctx);
     fmpz_mod_poly_clear(h1_inv, params.ctx);
+    fmpz_mod_poly_clear(second_block_G, params.ctx);
 }
 
 auto Code::init_keys(Random& rnd) -> void {
@@ -119,7 +122,11 @@ auto Code::init_keys(Random& rnd) -> void {
     
     fmpq_poly_get_numerator(numerator, h1_tmp);
     fmpz_mod_poly_set_fmpz_poly(h1, numerator, params.ctx);
-    
+
+    fmpz_mod_poly_mulmod(second_block_G, h1_inv, h0, params.modulus, params.ctx);
+    fmpz_set_si(m, 1);
+    fmpz_mod_poly_scalar_mul_fmpz(second_block_G, second_block_G, m, params.ctx);
+
     fmpq_poly_clear(mod);
     fmpq_poly_clear(gcd);
     fmpq_poly_clear(f);
@@ -131,8 +138,6 @@ auto Code::init_keys(Random& rnd) -> void {
     fmpz_poly_clear(numerator);
     fmpz_mod_poly_clear(g, params.ctx);
     fmpq_poly_clear(h1_tmp);
-
-
     /*
     flint_printf("h0: ");
     fmpz_mod_poly_print_pretty(h0, "x", params.ctx);
