@@ -477,12 +477,12 @@
          <array>
           <dict>
            <key>line</key><integer>74</integer>
-           <key>col</key><integer>35</integer>
+           <key>col</key><integer>36</integer>
            <key>file</key><integer>0</integer>
           </dict>
           <dict>
            <key>line</key><integer>74</integer>
-           <key>col</key><integer>40</integer>
+           <key>col</key><integer>41</integer>
            <key>file</key><integer>0</integer>
           </dict>
          </array>
@@ -494,7 +494,7 @@
      <key>location</key>
      <dict>
       <key>line</key><integer>74</integer>
-      <key>col</key><integer>35</integer>
+      <key>col</key><integer>36</integer>
       <key>file</key><integer>0</integer>
      </dict>
      <key>ranges</key>
@@ -502,12 +502,12 @@
        <array>
         <dict>
          <key>line</key><integer>74</integer>
-         <key>col</key><integer>35</integer>
+         <key>col</key><integer>36</integer>
          <key>file</key><integer>0</integer>
         </dict>
         <dict>
          <key>line</key><integer>74</integer>
-         <key>col</key><integer>52</integer>
+         <key>col</key><integer>53</integer>
          <key>file</key><integer>0</integer>
         </dict>
        </array>
@@ -527,12 +527,12 @@
          <array>
           <dict>
            <key>line</key><integer>74</integer>
-           <key>col</key><integer>35</integer>
+           <key>col</key><integer>36</integer>
            <key>file</key><integer>0</integer>
           </dict>
           <dict>
            <key>line</key><integer>74</integer>
-           <key>col</key><integer>40</integer>
+           <key>col</key><integer>41</integer>
            <key>file</key><integer>0</integer>
           </dict>
          </array>
@@ -545,7 +545,7 @@
           </dict>
           <dict>
            <key>line</key><integer>74</integer>
-           <key>col</key><integer>33</integer>
+           <key>col</key><integer>25</integer>
            <key>file</key><integer>0</integer>
           </dict>
          </array>
@@ -570,16 +570,16 @@
         </dict>
         <dict>
          <key>line</key><integer>74</integer>
-         <key>col</key><integer>53</integer>
+         <key>col</key><integer>54</integer>
          <key>file</key><integer>0</integer>
         </dict>
        </array>
      </array>
      <key>depth</key><integer>0</integer>
      <key>extended_message</key>
-     <string>Calling &apos;Random::random_index&apos;</string>
+     <string>Calling &apos;Random::integer&apos;</string>
      <key>message</key>
-     <string>Calling &apos;Random::random_index&apos;</string>
+     <string>Calling &apos;Random::integer&apos;</string>
     </dict>
     <dict>
      <key>kind</key><string>event</string>
@@ -591,9 +591,9 @@
      </dict>
      <key>depth</key><integer>1</integer>
      <key>extended_message</key>
-     <string>Entered call from &apos;Random::random_poly&apos;</string>
+     <string>Entered call from &apos;Random::poly&apos;</string>
      <key>message</key>
-     <string>Entered call from &apos;Random::random_poly&apos;</string>
+     <string>Entered call from &apos;Random::poly&apos;</string>
     </dict>
     <dict>
      <key>kind</key><string>control</string>
@@ -664,9 +664,9 @@
    <key>type</key><string>Division by zero</string>
    <key>check_name</key><string>core.DivideZero</string>
    <!-- This hash is experimental and going to change! -->
-   <key>issue_hash_content_of_line_in_context</key><string>15a78d6b84e2f7641ebcb055293cd44c</string>
+   <key>issue_hash_content_of_line_in_context</key><string>b8ba1e9343339c08378ae66e945fe105</string>
   <key>issue_context_kind</key><string>C++ method</string>
-  <key>issue_context</key><string>random_index</string>
+  <key>issue_context</key><string>integer</string>
   <key>issue_hash_function_offset</key><string>1</string>
   <key>location</key>
   <dict>

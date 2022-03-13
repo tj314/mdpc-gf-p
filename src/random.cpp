@@ -4,12 +4,12 @@ Random::Random() {
     srand(time(NULL));
 }
 
-auto Random::random_index(unsigned bound) -> unsigned {
+auto Random::integer(unsigned bound) -> unsigned {
     return rand() % bound;
 }
 
 
-auto Random::random_poly(fmpq_polyxx& output, const CodeParams& params, unsigned add_to_first) -> void {
+auto Random::poly(fmpq_polyxx& output, const CodeParams& params, unsigned add_to_first) -> void {
     unsigned third = params.k_value / 3;
     unsigned i;
 
@@ -30,7 +30,7 @@ auto Random::random_poly(fmpq_polyxx& output, const CodeParams& params, unsigned
 
     // shuffle
     for (i = 0; i < params.k_value-1; ++i) {
-        unsigned j = random_index(params.k_value - i) + i;
+        unsigned j = this->integer(params.k_value - i) + i;
 
         if (i == j) {
             continue;
@@ -50,7 +50,7 @@ auto Random::random_poly(fmpq_polyxx& output, const CodeParams& params, unsigned
 }
 
 
-auto Random::random_poly(fmpz_mod_polyxx& output, const CodeParams& params, unsigned add_to_first) -> void {
+auto Random::poly(fmpz_mod_polyxx& output, const CodeParams& params, unsigned add_to_first) -> void {
     unsigned third = params.k_value / 3;
     unsigned i;
 
@@ -71,7 +71,7 @@ auto Random::random_poly(fmpz_mod_polyxx& output, const CodeParams& params, unsi
 
     // shuffle
     for (i = 0; i < params.k_value-1; ++i) {
-        unsigned j = random_index(params.k_value - i) + i;
+        unsigned j = this->integer(params.k_value - i) + i;
 
         if (i == j) {
             continue;
@@ -88,4 +88,14 @@ auto Random::random_poly(fmpz_mod_polyxx& output, const CodeParams& params, unsi
         tmp1 += add_to_first;
         output.set_coeff(0, tmp1);
     }
+}
+
+auto Random::error_vector(const CodeParams& params) -> vector<fmpzxx> {
+    vector<fmpzxx> error_vector;
+
+    for (unsigned i = 0; i < 2*params.k_value; ++i) {
+        error_vector.push_back(fmpzxx{this->integer(params.q_value)});
+    }
+
+    return error_vector;
 }

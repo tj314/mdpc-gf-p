@@ -6,12 +6,15 @@
 #include <fmpzxx.h>
 #include <fmpz_mod_polyxx.h>
 #include <fmpq_polyxx.h>
-#include <nmod_vecxx.h>
 #include <iostream>
+#include <vector>
+#include <optional>
 #include <cmath>
 #include "random.hpp"
 
 using namespace flint;
+using std::vector;
+using std::optional;
 
 class Code {
 private:
@@ -20,11 +23,21 @@ private:
     fmpz_mod_polyxx h0, h1, h1_inv;
     fmpz_mod_polyxx mod;
 
+    // the second block should be calculated as follows:
+    // -(h1_inv*h0)^T
+    // here we omit the transposition and encode accordingly
+    fmpz_mod_polyxx second_block_G;
+
+    Random& rnd;
+
+    auto calculate_syndrome(vector<fmpzxx> ciphertext) -> vector<fmpzxx>;
+    auto decide(vector<fmpzxx>& error_vector, vector<fmpzxx> syndrome) -> void;
+    auto transform(vector<fmpzxx>& error_vetor) -> void;
 public:
     Code(unsigned q, unsigned k, Random& rnd);
-    auto init_keys(Random& rnd) -> void;
-    auto encode() -> void;
-    auto decode(void) -> void;
+    auto init_keys() -> void;
+    auto encode(vector<fmpzxx> plaintext) -> vector<fmpzxx>;
+    auto decode(vector<fmpzxx> ciphertext, unsigned num_iterations) -> optional<vector<fmpzxx>>;
 };
 
 #endif
