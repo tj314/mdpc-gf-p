@@ -4,12 +4,17 @@ Random::Random() {
     srand(time(NULL));
 }
 
-auto Random::integer(unsigned bound) -> unsigned {
+auto Random::get() -> Random& {
+    static Random instance;
+    return instance;
+}
+
+auto Random::integer_internal(unsigned bound) -> unsigned {
     return rand() % bound;
 }
 
 
-auto Random::poly(fmpq_polyxx& output, const CodeParams& params, unsigned add_to_first) -> void {
+auto Random::poly_internal(fmpq_polyxx& output, const CodeParams& params, unsigned add_to_first) -> void {
     unsigned third = params.k_value / 3;
     unsigned i;
 
@@ -30,7 +35,7 @@ auto Random::poly(fmpq_polyxx& output, const CodeParams& params, unsigned add_to
 
     // shuffle
     for (i = 0; i < params.k_value-1; ++i) {
-        unsigned j = this->integer(params.k_value - i) + i;
+        unsigned j = this->integer_internal(params.k_value - i) + i;
 
         if (i == j) {
             continue;
@@ -50,7 +55,7 @@ auto Random::poly(fmpq_polyxx& output, const CodeParams& params, unsigned add_to
 }
 
 
-auto Random::poly(fmpz_mod_polyxx& output, const CodeParams& params, unsigned add_to_first) -> void {
+auto Random::poly_internal(fmpz_mod_polyxx& output, const CodeParams& params, unsigned add_to_first) -> void {
     unsigned third = params.k_value / 3;
     unsigned i;
 
@@ -71,7 +76,7 @@ auto Random::poly(fmpz_mod_polyxx& output, const CodeParams& params, unsigned ad
 
     // shuffle
     for (i = 0; i < params.k_value-1; ++i) {
-        unsigned j = this->integer(params.k_value - i) + i;
+        unsigned j = this->integer_internal(params.k_value - i) + i;
 
         if (i == j) {
             continue;
@@ -90,12 +95,28 @@ auto Random::poly(fmpz_mod_polyxx& output, const CodeParams& params, unsigned ad
     }
 }
 
-auto Random::error_vector(const CodeParams& params) -> vector<fmpzxx> {
+auto Random::error_vector_internal(const CodeParams& params) -> vector<fmpzxx> {
     vector<fmpzxx> error_vector;
 
     for (unsigned i = 0; i < 2*params.k_value; ++i) {
-        error_vector.push_back(fmpzxx{this->integer(params.q_value)});
+        error_vector.push_back(fmpzxx{this->integer_internal(2) - 1});
     }
 
     return error_vector;
+}
+
+auto Random::integer(unsigned bound) -> unsigned {
+    return get().integer_internal(bound);
+}
+
+auto Random::poly(fmpq_polyxx& output, const CodeParams& params, unsigned add_to_first) -> void {
+    get().poly_internal(output, params, add_to_first);
+}
+
+auto Random::poly(fmpz_mod_polyxx& output, const CodeParams& params, unsigned add_to_first) -> void {
+    get().poly_internal(output, params, add_to_first);
+}
+
+auto Random::error_vector(const CodeParams& params) -> vector<fmpzxx> {
+    return get().error_vector_internal(params);
 }

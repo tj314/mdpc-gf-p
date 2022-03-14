@@ -28,13 +28,11 @@ private:
     // here we omit the transposition and encode accordingly
     fmpz_mod_polyxx second_block_G;
 
-    Random& rnd;
-
     auto calculate_syndrome(vector<fmpzxx> ciphertext) -> vector<fmpzxx>;
     auto decide(vector<fmpzxx>& error_vector, vector<fmpzxx> syndrome) -> void;
     auto transform(vector<fmpzxx>& error_vetor) -> void;
 public:
-    Code(unsigned q, unsigned k, Random& rnd);
+    Code(unsigned q, unsigned k);
     auto init_keys() -> void;
     auto encode(vector<fmpzxx> plaintext) -> vector<fmpzxx>;
     auto decode(vector<fmpzxx> ciphertext, unsigned num_iterations) -> optional<vector<fmpzxx>>;

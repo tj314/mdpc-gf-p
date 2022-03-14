@@ -28,14 +28,13 @@ CodeParams::CodeParams(unsigned q, unsigned k):
 // CODE CLASS
 // ==================
 
-Code::Code(unsigned q, unsigned k, Random& rnd):
+Code::Code(unsigned q, unsigned k):
     params(CodeParams{q, k}),
     h0(fmpz_mod_polyxx((this->params).context, k)),
     h1(fmpz_mod_polyxx((this->params).context, k)),
     h1_inv(fmpz_mod_polyxx((this->params).context, k)),
     mod(fmpz_mod_polyxx((this->params).context, k)),
-    second_block_G(fmpz_mod_polyxx((this->params).context)),
-    rnd(rnd) {
+    second_block_G(fmpz_mod_polyxx((this->params).context)) {
     mod.set_coeff(0, -1);
     mod.set_coeff(k, 1);
     init_keys();
@@ -44,7 +43,7 @@ Code::Code(unsigned q, unsigned k, Random& rnd):
 auto Code::init_keys() -> void {
     unsigned h0_prime = round(params.q_value / 3.0);
     unsigned h1_prime = round(params.q_value / 9.0);
-    rnd.poly(h0, params, h0_prime);  // coeffs from {-1, 0, 1} in Z_q
+    Random::poly(h0, params, h0_prime);  // coeffs from {-1, 0, 1} in Z_q
 
     fmpq_polyxx h1_tmp, mod, f;
     fmpz_polyxx numerator;
@@ -57,7 +56,7 @@ auto Code::init_keys() -> void {
 
     while (true) {
         // coeffs from {-1, 0, 1} in Q + h1_prime added to the first coeff
-        rnd.poly(h1_tmp, params, h1_prime);
+        Random::poly(h1_tmp, params, h1_prime);
         // calculate poly f(x) such that
         // f = h_1^{-1} mod (x^k - 1) in Q[x]
         auto xgcd_result = xgcd(h1_tmp, mod);
@@ -118,11 +117,9 @@ auto Code::init_keys() -> void {
 
 auto Code::encode(vector<fmpzxx> plaintext) -> vector<fmpzxx> {
     vector<fmpzxx> ciphertext{params.k_value};
-    vector<fmpzxx> error_vector = rnd.error_vector(params);
     fmpzxx tmp{0};
     for (unsigned i = 0; i < params.k_value; ++i) {
-        tmp = plaintext.at(i) + error_vector.at(i);
-        tmp = tmp % params.q;
+        tmp = plaintext.at(i) % params.q;
         ciphertext.push_back(tmp);
     }
     for (unsigned i = 0; i < params.k_value; ++i) {
@@ -130,7 +127,6 @@ auto Code::encode(vector<fmpzxx> plaintext) -> vector<fmpzxx> {
         for (unsigned j = 0; j < params.k_value; ++j) {
             tmp += (plaintext.at(j) * second_block_G.get_coeff((i+j) % params.k_value));
         }
-        tmp += error_vector.at(i+params.k_value);
         tmp = tmp % params.q;
         ciphertext.push_back(tmp);
     }
@@ -184,12 +180,50 @@ auto Code::calculate_syndrome(vector<fmpzxx> ciphertext) -> vector<fmpzxx> {
 }
 
 auto Code::decide(vector<fmpzxx>& error_vector, vector<fmpzxx> syndrome) -> void {
+    static double tmp1 = params.q_value / 2.0;
+    static double tmp2 = params.q_value / 6.0;
+    static double tmp3 = params.q_value / 18.0;
+    static unsigned q_thirds = round(params.q_value / 3.0);
+    static unsigned b1 = ceil(tmp2);
+    static unsigned b2 = floor(tmp1);
+    static unsigned b3 = ceil(tmp1);
+    static unsigned b4 = floor(5*tmp2);
+    static unsigned b5 = ceil(tmp3);
+    static unsigned b6 = floor(tmp2);
+    static unsigned b7 = ceil(tmp2);
+    static unsigned b8 = floor(5*tmp3);
+
     for (unsigned i = 0; i < params.k_value; ++i) {
-        fmpzxx p_i = syndrome.at(i);
-        // TODO: implement
+        unsigned p_i = syndrome.at(i).to<ulong>();
+        unsigned p_ki = syndrome.at(params.k_value+i).to<ulong>();
+        p_ki %= q_thirds;
+
+        if (p_i >= b1 && p_i <= b2) {
+            // e'_i = 1
+            error_vector.at(i) += 1;
+        } else if (p_i >= b3 && p_i <= b4) {
+            // e'_i = -1
+            error_vector.at(i) -= 1;
+        }
+
+        if (p_ki >= b5 && p_ki <= b6) {
+            // e'_ki = 1
+            error_vector.at(params.k_value + i) += 1;
+        } else if (p_ki >= b7 && p_ki <= b8) {
+            // e'_ki = -1
+            error_vector.at(params.k_value + i) -= 1;
+        }
     }
 }
 
 auto Code::transform(vector<fmpzxx>& error_vetor) -> void {
-    // TODO: implement
+    for (unsigned i = 0; i < 2*params.k_value; ++i) {
+        fmpzxx& val = error_vetor.at(i);
+        if (val == 2) {
+            val = -1;
+        } else if (val == -2) {
+            val = 1;
+        }
+    }
 }
+

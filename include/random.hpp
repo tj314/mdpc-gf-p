@@ -19,14 +19,24 @@ using flint::fmpz_mod_polyxx;
 using std::vector;
 
 class Random {
-public:
+private:
     Random();
 
-    auto integer(unsigned bound) -> unsigned;
+    // this is not needed now, but will be needed later
+    // DO NOT remove
+    static auto get() -> Random&;
 
-    auto poly(fmpq_polyxx& output, const CodeParams& params, unsigned add_to_first = 0) -> void;
-    auto poly(fmpz_mod_polyxx& output, const CodeParams& params, unsigned add_to_first = 0) -> void;
+    auto integer_internal(unsigned bound) -> unsigned;
+    auto poly_internal(fmpq_polyxx& output, const CodeParams& params, unsigned add_to_first = 0) -> void;
+    auto poly_internal(fmpz_mod_polyxx& output, const CodeParams& params, unsigned add_to_first = 0) -> void;
+    auto error_vector_internal(const CodeParams& params) -> vector<fmpzxx>;
 
-    auto error_vector(const CodeParams& params) -> vector<fmpzxx>;
+public:
+    Random(const Random& r) = delete;
+    static auto integer(unsigned bound) -> unsigned;
+    static auto poly(fmpq_polyxx& output, const CodeParams& params, unsigned add_to_first = 0) -> void;
+    static auto poly(fmpz_mod_polyxx& output, const CodeParams& params, unsigned add_to_first = 0) -> void;
+    static auto error_vector(const CodeParams& params) -> vector<fmpzxx>;
+
 };
 #endif
