@@ -1,114 +1,122 @@
 #include "random.hpp"
 
 Random::Random() {
-#ifdef BACKEND_C
     srand(time(NULL));
-#else
-    flint_randinit(rnd);
-    fmpz_init(bound);
-#endif
-    fmpz_init(tmp);
 }
 
-Random::~Random() {
-    fmpz_clear(tmp);
-#ifndef BACKEND_C
-    flint_randclear(rnd);
-    fmpz_clear(bound);
-#endif
+auto Random::get() -> Random& {
+    static Random instance;
+    return instance;
 }
 
-auto Random::random_index(unsigned bound) -> unsigned {
-#ifdef BACKEND_C
+auto Random::integer_internal(unsigned bound) -> unsigned {
     return rand() % bound;
-#else
-    fmpz_set_ui(this->bound, bound);
-    fmpz_randm(tmp, rnd, this->bound);
-    return fmpz_get_ui(tmp);
-#endif
 }
 
 
-auto Random::random_poly(fmpz_mod_poly_t output,  const CodeParams& params, unsigned add_to_first) -> void {
+auto Random::poly_internal(fmpq_polyxx& output, const CodeParams& params, unsigned add_to_first) -> void {
     unsigned third = params.k_value / 3;
     unsigned i;
-    
+
     // set the first third of poly to 1
     // set the second third to -1
     // and the rest to 0
     for (i = 0; i < third; ++i) {
-        fmpz_mod_poly_set_coeff_ui(output, i, 1, params.ctx);
+        output.set_coeff(i, 1);
     }
     for (; i < 2*third; ++i) {
-        fmpz_mod_poly_set_coeff_ui(output, i, params.q_value-1, params.ctx);
+        output.set_coeff(i, -1);
     }
     for (; i < params.k_value; ++i) {
-        fmpz_mod_poly_set_coeff_ui(output, i, 0, params.ctx);
+        output.set_coeff(i, 0);
     }
-    
-    unsigned tmp1, tmp2;
-    
+
+    fmpqxx tmp1, tmp2;
+
     // shuffle
     for (i = 0; i < params.k_value-1; ++i) {
-        unsigned j = random_index(params.k_value);
-        
-        if (i == j) continue;
-        else {
-            fmpz_mod_poly_get_coeff_fmpz(tmp, output, i, params.ctx);
-            tmp1 = fmpz_get_ui(tmp);
-            fmpz_mod_poly_get_coeff_fmpz(tmp, output, j, params.ctx);
-            tmp2 = fmpz_get_ui(tmp);
-            fmpz_mod_poly_set_coeff_ui(output, i, tmp2, params.ctx);
-            fmpz_mod_poly_set_coeff_ui(output, j, tmp1, params.ctx);
+        unsigned j = this->integer_internal(params.k_value - i) + i;
+
+        if (i == j) {
+            continue;
+        } else {
+            tmp1 = output.get_coeff(i);
+            tmp2 = output.get_coeff(j);
+            output.set_coeff(i, tmp2);
+            output.set_coeff(j, tmp1);
         }
     }
-    
+
     if (add_to_first != 0) {
-        fmpz_mod_poly_get_coeff_fmpz(tmp, output, 0, params.ctx);
-        tmp1 = fmpz_get_ui(tmp);
+        tmp1 = output.get_coeff(0);
         tmp1 += add_to_first;
-        fmpz_mod_poly_set_coeff_ui(output, 0, tmp1, params.ctx);
+        output.set_coeff(0, tmp1);
     }
 }
 
-auto Random::random_poly(fmpq_poly_t output,  const CodeParams& params, unsigned add_to_first) -> void {
+
+auto Random::poly_internal(fmpz_mod_polyxx& output, const CodeParams& params, unsigned add_to_first) -> void {
     unsigned third = params.k_value / 3;
     unsigned i;
-    
+
     // set the first third of poly to 1
     // set the second third to -1
     // and the rest to 0
     for (i = 0; i < third; ++i) {
-        fmpq_poly_set_coeff_si(output, i, 1);
+        output.set_coeff(i, 1);
     }
     for (; i < 2*third; ++i) {
-        fmpq_poly_set_coeff_si(output, i, -1);
+        output.set_coeff(i, -1);
     }
     for (; i < params.k_value; ++i) {
-        fmpq_poly_set_coeff_si(output, i, 0);
+        output.set_coeff(i, 0);
     }
-    
-    long tmp1, tmp2;
-    
+
+    fmpzxx tmp1, tmp2;
+
     // shuffle
     for (i = 0; i < params.k_value-1; ++i) {
-        unsigned j = random_index(params.k_value - i) + i;
-        
-        if (i == j) continue;
-        else {
-            fmpq_poly_get_coeff_fmpz(tmp, output, i);
-            tmp1 = fmpz_get_si(tmp);
-            fmpq_poly_get_coeff_fmpz(tmp, output, j);
-            tmp2 = fmpz_get_si(tmp);
-            fmpq_poly_set_coeff_si(output, i, tmp2);
-            fmpq_poly_set_coeff_si(output, j, tmp1);
+        unsigned j = this->integer_internal(params.k_value - i) + i;
+
+        if (i == j) {
+            continue;
+        } else {
+            tmp1 = output.get_coeff(i);
+            tmp2 = output.get_coeff(j);
+            output.set_coeff(i, tmp2);
+            output.set_coeff(j, tmp1);
         }
     }
-    
+
     if (add_to_first != 0) {
-        fmpq_poly_get_coeff_fmpz(tmp, output, 0);
-        tmp1 = fmpz_get_si(tmp);
+        tmp1 = output.get_coeff(0);
         tmp1 += add_to_first;
-        fmpq_poly_set_coeff_si(output, 0, tmp1);
+        output.set_coeff(0, tmp1);
     }
+}
+
+auto Random::error_vector_internal(const CodeParams& params) -> vector<fmpzxx> {
+    vector<fmpzxx> error_vector;
+
+    for (unsigned i = 0; i < 2*params.k_value; ++i) {
+        error_vector.push_back(fmpzxx{this->integer_internal(2) - 1});
+    }
+
+    return error_vector;
+}
+
+auto Random::integer(unsigned bound) -> unsigned {
+    return get().integer_internal(bound);
+}
+
+auto Random::poly(fmpq_polyxx& output, const CodeParams& params, unsigned add_to_first) -> void {
+    get().poly_internal(output, params, add_to_first);
+}
+
+auto Random::poly(fmpz_mod_polyxx& output, const CodeParams& params, unsigned add_to_first) -> void {
+    get().poly_internal(output, params, add_to_first);
+}
+
+auto Random::error_vector(const CodeParams& params) -> vector<fmpzxx> {
+    return get().error_vector_internal(params);
 }

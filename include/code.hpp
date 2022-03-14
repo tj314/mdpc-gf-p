@@ -1,33 +1,41 @@
 #ifndef MCELIECE_QCMDPC_GF_P_CODE_HPP
 #define MCELIECE_QCMDPC_GF_P_CODE_HPP
 
-#include <flint.h>
-#include <fmpq.h>
-#include <fmpz.h>
-#include <fmpz_mod_poly.h>
-#include <fmpq_poly.h>
+#include <flintxx.h>
+#include <fmpqxx.h>
+#include <fmpzxx.h>
+#include <fmpz_mod_polyxx.h>
+#include <fmpq_polyxx.h>
 #include <iostream>
+#include <vector>
+#include <optional>
 #include <cmath>
 #include "random.hpp"
+
+using namespace flint;
+using std::vector;
+using std::optional;
 
 class Code {
 private:
     CodeParams params;  // DO NOT MOVE THIS
                         // params MUST be the first member in this class
-    fmpz_mod_poly_t h0, h1, h1_inv;
+    fmpz_mod_polyxx h0, h1, h1_inv;
+    fmpz_mod_polyxx mod;
 
-    // second block of G is supposed to be calculated as follows:
+    // the second block should be calculated as follows:
     // -(h1_inv*h0)^T
-    // however, here, we omit the transposition
-    // this is because it is unnecessary for the encoding to work
-    fmpz_mod_poly_t second_block_G;
+    // here we omit the transposition and encode accordingly
+    fmpz_mod_polyxx second_block_G;
 
+    auto calculate_syndrome(vector<fmpzxx> ciphertext) -> vector<fmpzxx>;
+    auto decide(vector<fmpzxx>& error_vector, vector<fmpzxx> syndrome) -> void;
+    auto transform(vector<fmpzxx>& error_vetor) -> void;
 public:
-    Code(unsigned q, unsigned k, Random& rnd);
-    ~Code();
-    auto init_keys(Random& rnd) -> void;
-    auto encode() -> void;
-    auto decode(void) -> void;
+    Code(unsigned q, unsigned k);
+    auto init_keys() -> void;
+    auto encode(vector<fmpzxx> plaintext) -> vector<fmpzxx>;
+    auto decode(vector<fmpzxx> ciphertext, unsigned num_iterations) -> optional<vector<fmpzxx>>;
 };
 
 #endif

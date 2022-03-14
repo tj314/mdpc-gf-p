@@ -1,37 +1,42 @@
 #ifndef MCELIECE_QCMDPC_GF_P_RANDOM_HPP
 #define MCELIECE_QCMDPC_GF_P_RANDOM_HPP
 
-#define BACKEND_C
-
-#ifdef BACKEND_C
 #include <time.h>
 #include <stdlib.h>
-#endif
-#include <flint.h>
-#include <fmpz.h>
-#include <fmpq.h>
-#include <fmpz_mod_poly.h>
-#include <fmpq_poly.h>
-
+#include <flintxx.h>
+#include <fmpzxx.h>
+#include <fmpqxx.h>
+#include <fmpz_mod_polyxx.h>
+#include <fmpq_polyxx.h>
 #include <iostream>
-
+#include <vector>
 #include "codeparams.hpp"
+
+using flint::fmpq_polyxx;
+using flint::fmpzxx;
+using flint::fmpqxx;
+using flint::fmpz_mod_polyxx;
+using std::vector;
 
 class Random {
 private:
-#ifndef BACKEND_C
-    flint_rand_t rnd;
-    fmpz_t bound;
-#endif
-    fmpz_t tmp;
+    Random();
+
+    // this is not needed now, but will be needed later
+    // DO NOT remove
+    static auto get() -> Random&;
+
+    auto integer_internal(unsigned bound) -> unsigned;
+    auto poly_internal(fmpq_polyxx& output, const CodeParams& params, unsigned add_to_first = 0) -> void;
+    auto poly_internal(fmpz_mod_polyxx& output, const CodeParams& params, unsigned add_to_first = 0) -> void;
+    auto error_vector_internal(const CodeParams& params) -> vector<fmpzxx>;
 
 public:
-    Random();
-    ~Random();
+    Random(const Random& r) = delete;
+    static auto integer(unsigned bound) -> unsigned;
+    static auto poly(fmpq_polyxx& output, const CodeParams& params, unsigned add_to_first = 0) -> void;
+    static auto poly(fmpz_mod_polyxx& output, const CodeParams& params, unsigned add_to_first = 0) -> void;
+    static auto error_vector(const CodeParams& params) -> vector<fmpzxx>;
 
-    auto random_index(unsigned bound) -> unsigned;
-    
-    auto random_poly(fmpz_mod_poly_t output, const CodeParams& params, unsigned add_to_first=0) -> void;
-    auto random_poly(fmpq_poly_t output, const CodeParams& params, unsigned add_to_first=0) -> void;
 };
 #endif
