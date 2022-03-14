@@ -1,5 +1,6 @@
 #include "code.hpp"
 #include "codeparams.hpp"
+#include "flint.h"
 
 // ==================
 // CODE PARAMS CLASS
@@ -97,31 +98,36 @@ auto Code::init_keys() -> void {
     for (slong i = 0; i <= h1_tmp.degree(); ++i) {
         h1.set_coeff(i, h1_tmp.get_coeff(i).num());
     }
-    
-    /*
-    auto p = h1 * h1_inv;
 
+    flint_printf("h0:     ");
     h0.print_pretty("x");
     flint_printf("\n");
+    flint_printf("h1:     ");
     h1.print_pretty("x");
     flint_printf("\n");
+    flint_printf("h1_inv: ");
     h1_inv.print_pretty("x");
     flint_printf("\n");
-    p.print_pretty("x");
-    flint_printf("\n");
-    */
-    second_block_G.set(h1_inv * h0);
+
+    second_block_G.set((h1_inv * h0) % this->mod);
     fmpzxx scalar{-1};
     second_block_G = scalar * second_block_G;
+
+    flint_printf("G seco: ");
+    second_block_G.print_pretty("x");
+    flint_printf("\n");
 };
 
-auto Code::encode(vector<fmpzxx> plaintext) -> vector<fmpzxx> {
-    vector<fmpzxx> ciphertext{params.k_value};
+auto Code::encode(const vector<fmpzxx>& plaintext) -> vector<fmpzxx> {
+    vector<fmpzxx> ciphertext;
     fmpzxx tmp{0};
+    std::cout << "before encode" << std::endl;
     for (unsigned i = 0; i < params.k_value; ++i) {
         tmp = plaintext.at(i) % params.q;
+        std::cout << tmp << " ";
         ciphertext.push_back(tmp);
     }
+    std::cout << std::endl;
     for (unsigned i = 0; i < params.k_value; ++i) {
         tmp = 0;
         for (unsigned j = 0; j < params.k_value; ++j) {
@@ -130,13 +136,27 @@ auto Code::encode(vector<fmpzxx> plaintext) -> vector<fmpzxx> {
         tmp = tmp % params.q;
         ciphertext.push_back(tmp);
     }
+
+
+    for (unsigned i = 0; i < 2*params.k_value; ++i) {
+        std::cout << ciphertext.at(i) << " ";
+    }
+    std::cout << std::endl;
+    std::cout << "after encode" << std::endl;
     return ciphertext;
 };
 
 
-auto Code::decode(vector<fmpzxx> ciphertext, unsigned num_iterations) -> optional<vector<fmpzxx>> {
-    vector<fmpzxx> error_vector{params.k_value * 2, fmpzxx{0}};
+auto Code::decode(const vector<fmpzxx>& ciphertext, unsigned num_iterations) -> optional<vector<fmpzxx>> {
+    vector<fmpzxx> error_vector{2*params.k_value, fmpzxx{0}};
     vector<fmpzxx> syndrome = calculate_syndrome(ciphertext);
+    bool syndrome_is_zero = true;
+    for (unsigned i = 0; i < params.k_value; ++i) {
+        syndrome_is_zero = syndrome_is_zero && syndrome.at(i).is_zero();
+    }
+    if (syndrome_is_zero) {
+        return error_vector;
+    }
     vector<fmpzxx> p{syndrome};
     vector<fmpzxx> esyn;
     fmpzxx tmp;
@@ -146,7 +166,7 @@ auto Code::decode(vector<fmpzxx> ciphertext, unsigned num_iterations) -> optiona
         esyn = calculate_syndrome(error_vector);
 
         // p = s - He^T
-        bool syndrome_is_zero = true;
+        syndrome_is_zero = true;
         for (unsigned i = 0; i < params.k_value; ++i) {
             tmp = p.at(i) - esyn.at(i);
             tmp %= params.q;
@@ -162,8 +182,8 @@ auto Code::decode(vector<fmpzxx> ciphertext, unsigned num_iterations) -> optiona
     return {};
 }
 
-auto Code::calculate_syndrome(vector<fmpzxx> ciphertext) -> vector<fmpzxx> {
-    vector<fmpzxx> syndrome{params.k_value};
+auto Code::calculate_syndrome(const vector<fmpzxx>& ciphertext) -> vector<fmpzxx> {
+    vector<fmpzxx> syndrome;
     fmpzxx tmp;
     for (unsigned i = 0; i < params.k_value; ++i) {
         tmp = 0;
@@ -179,7 +199,7 @@ auto Code::calculate_syndrome(vector<fmpzxx> ciphertext) -> vector<fmpzxx> {
     return syndrome;
 }
 
-auto Code::decide(vector<fmpzxx>& error_vector, vector<fmpzxx> syndrome) -> void {
+auto Code::decide(vector<fmpzxx>& error_vector, const vector<fmpzxx>& syndrome) -> void {
     static double tmp1 = params.q_value / 2.0;
     static double tmp2 = params.q_value / 6.0;
     static double tmp3 = params.q_value / 18.0;
@@ -193,10 +213,10 @@ auto Code::decide(vector<fmpzxx>& error_vector, vector<fmpzxx> syndrome) -> void
     static unsigned b7 = ceil(tmp2);
     static unsigned b8 = floor(5*tmp3);
 
+    std::cout << "err_len, syn_len: " << error_vector.size() << " " << syndrome.size() << std::endl;
+
     for (unsigned i = 0; i < params.k_value; ++i) {
         unsigned p_i = syndrome.at(i).to<ulong>();
-        unsigned p_ki = syndrome.at(params.k_value+i).to<ulong>();
-        p_ki %= q_thirds;
 
         if (p_i >= b1 && p_i <= b2) {
             // e'_i = 1
@@ -206,10 +226,11 @@ auto Code::decide(vector<fmpzxx>& error_vector, vector<fmpzxx> syndrome) -> void
             error_vector.at(i) -= 1;
         }
 
-        if (p_ki >= b5 && p_ki <= b6) {
+        p_i %= q_thirds;
+        if (p_i >= b5 && p_i <= b6) {
             // e'_ki = 1
             error_vector.at(params.k_value + i) += 1;
-        } else if (p_ki >= b7 && p_ki <= b8) {
+        } else if (p_i >= b7 && p_i <= b8) {
             // e'_ki = -1
             error_vector.at(params.k_value + i) -= 1;
         }
