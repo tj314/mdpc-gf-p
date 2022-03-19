@@ -6,4 +6,4 @@
 build/
 obj/
 compile_commands.json
-code.plist
+*.plist
