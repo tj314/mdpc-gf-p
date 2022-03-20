@@ -70,14 +70,14 @@ private:
         }
     }
 
-    auto error_vector_internal(unsigned k) -> vector<fmpzxx>;
+    auto error_vector_internal(unsigned k) -> vector<int>;
 
 public:
     Random(const Random& r) = delete;
     static auto integer(unsigned bound) -> unsigned;
     static auto poly(fmpq_polyxx& output, unsigned k, unsigned add_to_first = 0) -> void;
     static auto poly(fmpz_mod_polyxx& output, unsigned k, unsigned add_to_first = 0) -> void;
-    static auto error_vector(unsigned k) -> vector<fmpzxx>;
+    static auto error_vector(unsigned k) -> vector<int>;
     static auto reseed() -> void;
 };
 #endif

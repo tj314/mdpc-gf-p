@@ -15,11 +15,11 @@ auto Random::integer_internal(unsigned bound) -> unsigned {
     return rand() % bound;
 }
 
-auto Random::error_vector_internal(unsigned k) -> vector<fmpzxx> {
-    vector<fmpzxx> error_vector;
+auto Random::error_vector_internal(unsigned k) -> vector<int> {
+    vector<int> error_vector;
 
     for (unsigned i = 0; i < 2*k; ++i) {
-        error_vector.push_back(fmpzxx{(long)(this->integer_internal(2)) - 1});
+        error_vector.push_back((int)(this->integer_internal(3)) - 1);
     }
 
     return error_vector;
@@ -37,7 +37,7 @@ auto Random::poly(fmpz_mod_polyxx& output, unsigned k, unsigned add_to_first) ->
     get().poly_internal<fmpz_mod_polyxx, fmpzxx>(output, k, add_to_first);
 }
 
-auto Random::error_vector(unsigned k) -> vector<fmpzxx> {
+auto Random::error_vector(unsigned k) -> vector<int> {
     return get().error_vector_internal(k);
 }
 

@@ -1,4 +1,5 @@
 #include "protocol.hpp"
+#include <iomanip>
 
 auto Protocol::encrypt(const vector<unsigned>& plaintext, bool verbose) -> optional<vector<unsigned>> {
     if (plaintext.size() != k) {
@@ -12,23 +13,32 @@ auto Protocol::encrypt(const vector<unsigned>& plaintext, bool verbose) -> optio
         vec.push_back(fmpzxx{plaintext.at(i)});
     }
     vector<fmpzxx> encoded = c.encode(vec);
-    vector<fmpzxx> error_vector = Random::error_vector(k);
+    vector<int> error_vector = Random::error_vector(k);
     std::cout << "Error_vector: ";
-    for (const fmpzxx& val : error_vector) {
-        std::cout << val << " ";
+    for (int val : error_vector) {
+        std::cout << std::setw(2) << val << " ";
     }
     std::cout << std::endl;
     std::cout << "Encoded:      ";
     for (const fmpzxx& val : encoded) {
-        std::cout << val << " ";
+        std::cout << std::setw(2) << val << " ";
     }
     std::cout << std::endl;
     vector<unsigned> encrypted;
-    fmpzxx tmp;
+    long tmp;
     for (unsigned i = 0; i < 2*k; ++i) {
-        tmp = encoded.at(i) + error_vector.at(i);
-        encrypted.push_back(tmp.to<ulong>() % q);
+        tmp = (long)encoded.at(i).to<slong>();
+        tmp += error_vector.at(i);
+        if (tmp == -1l) {
+            tmp += q;
+        }
+        encrypted.push_back(tmp % q);
     }
+    std::cout << "Encrypted:    ";
+    for (unsigned val : encrypted) {
+        std::cout << std::setw(2) << val << " ";
+    }
+    std::cout << std::endl;
     return encrypted;
 }
 
