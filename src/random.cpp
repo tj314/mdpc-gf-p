@@ -19,7 +19,7 @@ auto Random::error_vector_internal(unsigned k) -> vector<fmpzxx> {
     vector<fmpzxx> error_vector;
 
     for (unsigned i = 0; i < 2*k; ++i) {
-        error_vector.push_back(fmpzxx{this->integer_internal(2) - 1});
+        error_vector.push_back(fmpzxx{(long)(this->integer_internal(2)) - 1});
     }
 
     return error_vector;

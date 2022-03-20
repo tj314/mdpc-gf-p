@@ -13,6 +13,16 @@ auto Protocol::encrypt(const vector<unsigned>& plaintext, bool verbose) -> optio
     }
     vector<fmpzxx> encoded = c.encode(vec);
     vector<fmpzxx> error_vector = Random::error_vector(k);
+    std::cout << "Error_vector: ";
+    for (const fmpzxx& val : error_vector) {
+        std::cout << val << " ";
+    }
+    std::cout << std::endl;
+    std::cout << "Encoded:      ";
+    for (const fmpzxx& val : encoded) {
+        std::cout << val << " ";
+    }
+    std::cout << std::endl;
     vector<unsigned> encrypted;
     fmpzxx tmp;
     for (unsigned i = 0; i < 2*k; ++i) {
