@@ -7,7 +7,7 @@ auto Protocol::encrypt(const vector<unsigned>& plaintext, bool verbose) -> optio
         }
         return {};
     }
-    vector<fmpzxx> vec{k};
+    vector<fmpzxx> vec;
     for (unsigned i = 0; i < k; ++i) {
         vec.push_back(fmpzxx{plaintext.at(i)});
     }

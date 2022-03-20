@@ -125,11 +125,12 @@ auto Code::encode(const vector<fmpzxx>& plaintext) -> vector<fmpzxx> {
     }
 
     /*
+    std::cout << "encode inside: ";
     for (unsigned i = 0; i < 2*k_value; ++i) {
         std::cout << ciphertext.at(i) << " ";
     }
     std::cout << std::endl;
-    std::cout << "after encode" << std::endl;
+    // std::cout << "after encode" << std::endl;
     */
     return ciphertext;
 };
