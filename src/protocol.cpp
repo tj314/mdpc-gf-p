@@ -14,6 +14,7 @@ auto Protocol::encrypt(const vector<unsigned>& plaintext, bool verbose) -> optio
     }
     vector<fmpzxx> encoded = c.encode(vec);
     vector<int> error_vector = Random::error_vector(k);
+    /*
     std::cout << "Error_vector: ";
     for (int val : error_vector) {
         std::cout << std::setw(2) << val << " ";
@@ -24,6 +25,7 @@ auto Protocol::encrypt(const vector<unsigned>& plaintext, bool verbose) -> optio
         std::cout << std::setw(2) << val << " ";
     }
     std::cout << std::endl;
+    */
     vector<unsigned> encrypted;
     long tmp;
     for (unsigned i = 0; i < 2*k; ++i) {
@@ -34,11 +36,13 @@ auto Protocol::encrypt(const vector<unsigned>& plaintext, bool verbose) -> optio
         }
         encrypted.push_back(tmp % q);
     }
+    /*
     std::cout << "Encrypted:    ";
     for (unsigned val : encrypted) {
         std::cout << std::setw(2) << val << " ";
     }
     std::cout << std::endl;
+    */
     return encrypted;
 }
 
@@ -58,7 +62,7 @@ auto Protocol::decrypt(const vector<unsigned>& ciphertext, unsigned num_iteratio
     auto maybe_error_vector = c.decode(ctext, num_iterations);
     if (!maybe_error_vector) {
         if (verbose) {
-           cerr << "Decrypt: Decryption failure!" << endl;
+           cerr << "Decrypt: Decoding failure!" << endl;
         }
         return {};
     }

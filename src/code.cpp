@@ -1,4 +1,5 @@
 #include "code.hpp"
+#include <iomanip>
 
 Code::Code(unsigned q, unsigned k):
     q_value(q),
@@ -85,23 +86,53 @@ auto Code::init_keys() -> void {
         h1.set_coeff(i, h1_tmp.get_coeff(i).num());
     }
     /*
-    flint_printf("h0:     ");
+    std::cout << "h0 poly:      ";
+    for (slong i = 0; i <= h0.degree(); ++i) {
+        std::cout << std::setw(2) << h0.get_coeff(i);
+        std::cout << " ";
+    }
+    std::cout << std::endl;
+
+    std::cout << "h0 poly nice: ";
     h0.print_pretty("x");
-    flint_printf("\n");
-    flint_printf("h1:     ");
+    std::cout << std::endl;
+    
+    std::cout << "h1 poly:      ";
+    for (slong i = 0; i <= h1.degree(); ++i) {
+        std::cout << std::setw(2) << h1.get_coeff(i);
+        std::cout << " ";
+    }
+    std::cout << std::endl;
+    
+    std::cout << "h1 poly nice: ";
     h1.print_pretty("x");
-    flint_printf("\n");
-    flint_printf("h1_inv: ");
+    std::cout << std::endl;
+    
+    std::cout << "h1 inv poly:  ";
+    for (slong i = 0; i <= h1_inv.degree(); ++i) {
+        std::cout << std::setw(2) << h1_inv.get_coeff(i);
+        std::cout << " ";
+    }
+    std::cout << std::endl;
+    
+    std::cout << "h1 inv nice:  ";
     h1_inv.print_pretty("x");
-    flint_printf("\n");
+    std::cout << std::endl;
     */
+    fmpz_mod_polyxx pol{this->context, k_value};
+    pol.set((h1*h1_inv) % this->mod);
+    // std::cout << "h1_inv is OK:  " << (pol.is_one() ? "true" : "false") << std::endl;
+
     second_block_G.set((h1_inv * h0) % this->mod);
     fmpzxx scalar{-1};
     second_block_G = scalar * second_block_G;
     /*
-    flint_printf("G seco: ");
-    second_block_G.print_pretty("x");
-    flint_printf("\n");
+    std::cout << "2nd block G:  ";
+    for (slong i = 0; i <= second_block_G.degree(); ++i) {
+        std::cout << std::setw(2) << second_block_G.get_coeff(i);
+        std::cout << " ";
+    }
+    std::cout << std::endl;
     */
 };
 
@@ -135,6 +166,16 @@ auto Code::encode(const vector<fmpzxx>& plaintext) -> vector<fmpzxx> {
     return ciphertext;
 };
 
+/*
+template<typename T>
+auto print_vec(const char * msg, vector<T> vec) -> void {
+    std::cout << msg;
+    for (const T& val : vec) {
+        std::cout << std::setw(2) << val << " ";
+    }
+    std::cout << std::endl;
+}
+*/
 
 auto Code::decode(const vector<fmpzxx>& ciphertext, unsigned num_iterations) -> optional<vector<fmpzxx>> {
     vector<fmpzxx> error_vector{2*k_value, fmpzxx{0}};
@@ -149,10 +190,14 @@ auto Code::decode(const vector<fmpzxx>& ciphertext, unsigned num_iterations) -> 
     vector<fmpzxx> p{syndrome};
     vector<fmpzxx> esyn;
     fmpzxx tmp;
+    // std::cout << "DECODING:" << std::endl;
+    // print_vec("\tsyndrome before: ", p);
     for (unsigned iter = 0; iter < num_iterations; ++iter) {
+        // std::cout << "Iteration " << iter << std::endl;
         decide(error_vector, p);
         transform(error_vector);
         esyn = calculate_syndrome(error_vector);
+        // print_vec("\terror vector:    ", error_vector);
 
         // p = s - He^T
         syndrome_is_zero = true;
@@ -162,6 +207,7 @@ auto Code::decode(const vector<fmpzxx>& ciphertext, unsigned num_iterations) -> 
             p.at(i) = tmp;
             syndrome_is_zero = p.at(i).is_zero() && syndrome_is_zero;
         }
+        // print_vec("\tsyndrome after:  ", p);
         
         if (syndrome_is_zero) {
             return error_vector;
@@ -179,6 +225,7 @@ auto Code::calculate_syndrome(const vector<fmpzxx>& ciphertext) -> vector<fmpzxx
         for (unsigned j = 0; j < k_value; ++j) {
             tmp += (h0.get_coeff((i + j) % k_value) * ciphertext.at(j));
         }
+        tmp %= q;
         for (unsigned j = 0; j < k_value; ++j) {
             tmp += (h1.get_coeff((i + j) % k_value) * ciphertext.at(k_value + j));
         }
