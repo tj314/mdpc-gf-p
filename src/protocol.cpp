@@ -1,5 +1,4 @@
 #include "protocol.hpp"
-#include <iomanip>
 
 auto Protocol::encrypt(const vector<unsigned>& plaintext, bool verbose) -> optional<vector<unsigned>> {
     if (plaintext.size() != k) {
@@ -68,11 +67,11 @@ auto Protocol::decrypt(const vector<unsigned>& ciphertext, unsigned num_iteratio
     }
 
     vector<unsigned> plaintext;
-    fmpzxx tmp;
+    fmpzxx tmp, mod{q};
     auto for_sure_error_vector = maybe_error_vector.value();
     for (unsigned i = 0; i < k; ++i) {
         tmp = ctext.at(i) - for_sure_error_vector.at(i);
-        plaintext.push_back((unsigned)(tmp.to<slong>() % q));
+        plaintext.push_back((unsigned)(tmp % mod).to<ulong>());
     }
     return plaintext;
 }
