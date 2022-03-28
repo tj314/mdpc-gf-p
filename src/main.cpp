@@ -7,8 +7,9 @@ using std::vector;
 using flint::fmpzxx;
 
 auto main() -> int {
-    unsigned q = 512, k = 293;
+    unsigned q = 345, k = 491;
     Protocol p{q, k};
+    std::cout << "keys generated!" << std::endl;
 
     vector<unsigned> plaintext;
     for (unsigned i = 0; i < k; ++i) {
@@ -22,7 +23,7 @@ auto main() -> int {
     }
     auto ciphertext = maybe_encrypted.value();
 
-    auto maybe_decrypted = p.decrypt(ciphertext, 10, true);
+    auto maybe_decrypted = p.decrypt(ciphertext, 100, true);
     if (!maybe_decrypted) {
         std::cerr << "Decryption failed!" << std::endl;
         return -1;

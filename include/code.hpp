@@ -26,20 +26,9 @@ struct DecodeBounds {
     double q_2, q_6, q_18;
     unsigned b1, b2, b3, b4, b5, b6, b7, b8;
 
-    explicit DecodeBounds(unsigned q) :
-        q(q),
-        q_thirds(round(q / 3.0)),
-        q_2(q / 2.0),
-        q_6(q / 6.0),
-        q_18(q / 18.0),
-        b1(ceil(q_6)),
-        b2(floor(q_2)),
-        b3(ceil(q_2)),
-        b4(floor(5*q_6)),
-        b5(ceil(q_18)),
-        b6(floor(q_6)),
-        b7(ceil(q_6)),
-        b8(floor(5*q_18)) {}
+    DecodeBounds() = default;
+
+    auto set(unsigned q) -> void;
 };
 
 

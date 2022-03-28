@@ -9,7 +9,7 @@ OBJECTS := $(SOURCES:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 CXX := g++
 CXXFLAGS := -std=c++17 -Wall -Werror -Wextra
 
-CPPFLAGS := -I/usr/include/flint -Iinclude -MMD -MP # -MDD -MP generate header deps automatically
+CPPFLAGS := -I/usr/include/flint -I./include -MMD -MP # -MDD -MP generate header deps automatically
 LDFLAGS := -lflint -lgmp -lm
 
 .PHONY: all clean

@@ -1,5 +1,20 @@
 #include "code.hpp"
-#include <iomanip>
+
+auto DecodeBounds::set(unsigned q) -> void {
+        this->q = q;
+        q_thirds = round(q / 3.0);
+        q_2 = q / 2.0;
+        q_6 = q / 6.0;
+        q_18 = q / 18.0;
+        b1 = ceil(q_6);
+        b2 = floor(q_2);
+        b3 = ceil(q_2);
+        b4 = floor(5*q_6);
+        b5 = ceil(q_18);
+        b6 = floor(q_6);
+        b7 = ceil(q_6);
+        b8 = floor(5*q_18);
+}
 
 Code::Code(unsigned q, unsigned k):
     q_value(q),
@@ -29,6 +44,7 @@ Code::Code(unsigned q, unsigned k):
 }
 
 auto Code::init_keys() -> void {
+    bounds.set(q_value);
     unsigned h0_prime = round(q_value / 3.0);
     unsigned h1_prime = round(q_value / 9.0);
     Random::poly(h0, k_value, h0_prime);  // coeffs from {-1, 0, 1} in Z_q
