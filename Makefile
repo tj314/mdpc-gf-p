@@ -7,7 +7,7 @@ SOURCES := $(wildcard $(SRC_DIR)/*.cpp)
 OBJECTS := $(SOURCES:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
 CXX := g++
-CXXFLAGS := -std=c++17 -Wall -Werror -Wextra
+CXXFLAGS := -std=c++17 -Wall -Wextra
 
 CPPFLAGS := -I/usr/include/flint -I./include -MMD -MP # -MDD -MP generate header deps automatically
 LDFLAGS := -lflint -lgmp -lm
@@ -20,13 +20,16 @@ $(OUT_EXE): $(OBJECTS) | $(BIN_DIR)
 	$(CXX) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
-	$(CXX) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
 $(BIN_DIR) $(OBJ_DIR):
 	mkdir -p $@
 
 clean:
 	@$(RM) -rv $(BIN_DIR) $(OBJ_DIR)
+
+debug: CXXFLAGS := $(CXXFLAGS) -g
+debug: $(OUT_EXE)
 
 -include $(OBJ:.o=.d)
 
