@@ -38,48 +38,71 @@ Code::Code(unsigned q, unsigned k):
         // TODO: k is probably small enough to test deterministically
         std::cout << "Code params: Parameter k is probably not prime!" << std::endl;
     }
-    mod.set_coeff(0, -1);
+    mod.set_coeff(0, q - 1);
     mod.set_coeff(k, 1);
     init_keys();
 }
 
 auto Code::init_keys() -> void {
     bounds.set(q_value);
-    unsigned h0_prime = round(q_value / 3.0);
-    unsigned h1_prime = round(q_value / 9.0);
-    Random::poly(h0, k_value, h0_prime);  // coeffs from {-1, 0, 1} in Z_q
+    unsigned h0_tick = round(q_value / 3.0);
+    unsigned h1_tick = round(q_value / 9.0);
+    Random::poly(h0, k_value, q_value, h0_tick);  // coeffs from {-1, 0, 1} in Z_q
 
-    fmpq_polyxx h1_tmp, mod, f;
+    fmpq_polyxx h1_tmp, modulo, f;
     fmpz_polyxx numerator;
     fmpz_mod_polyxx g{context};
     fmpzxx m, r;
-    mod.set_coeff(0, -1);
-    mod.set_coeff(k_value, 1);
-
-
+    modulo.set_coeff(0, -1);
+    modulo.set_coeff(k_value, 1);
+    for (int i = 0; i <= modulo.degree(); ++i)
+        std::cout << modulo.get_coeff(i) << " ";
+    std::cout << std::endl;
 
     while (true) {
         // coeffs from {-1, 0, 1} in Q + h1_prime added to the first coeff
-        Random::poly(h1_tmp, k_value, h1_prime);
+        Random::poly(h1_tmp, k_value, h1_tick);
+
+        std::cout << "h0: ";
+        for (int i = 0; i <= h0.degree(); ++i) {
+            std::cout << h0.get_coeff(i) << " ";
+        }
+        std::cout << std::endl;
+
+        std::cout << "h1: ";
+        for (int i = 0; i <= h1_tmp.degree(); ++i) {
+            std::cout << h1_tmp.get_coeff(i) << " ";
+        }
+        std::cout << std::endl;
         // calculate poly f(x) such that
         // f = h_1^{-1} mod (x^k - 1) in Q[x]
-        auto xgcd_result = xgcd(h1_tmp, mod);
+        auto xgcd_result = xgcd(h1_tmp, modulo);
         if (!xgcd_result.get<0>().is_one()) {
             // gcd(h1_tmp, mod) != 1,
             // therefore f does not exist
+            std::cin.ignore();
             continue;
         }
         f = xgcd_result.get<1>();
-        f %= mod;
+        f %= modulo;
+
+        std::cout << "h1^-1: ";
+        for (int i = 0; i <= f.degree(); ++i) {
+            std::cout << f.get_coeff(i) << " ";
+        }
+        std::cout << std::endl;
 
         // let m be denominator of f
         m = f.den();
+        std::cout << "denom is " << m << std::endl;
+        std::cin.ignore();
 
         // calculate r such that
         // r = m^-1 mod q
         auto xgcd_result2 = xgcd(m, q);
         if (!xgcd_result2.get<0>().is_one()) {
             // r does not exist
+            std::cout << "gcd of " << m << " and " << q << " is " << xgcd_result2.get<0>() << std::endl;
             continue;
         }
         r = xgcd_result2.get<1>();
@@ -101,55 +124,16 @@ auto Code::init_keys() -> void {
     for (slong i = 0; i <= h1_tmp.degree(); ++i) {
         h1.set_coeff(i, h1_tmp.get_coeff(i).num());
     }
-    /*
-    std::cout << "h0 poly:      ";
-    for (slong i = 0; i <= h0.degree(); ++i) {
-        std::cout << std::setw(2) << h0.get_coeff(i);
-        std::cout << " ";
-    }
-    std::cout << std::endl;
 
-    std::cout << "h0 poly nice: ";
-    h0.print_pretty("x");
-    std::cout << std::endl;
-    
-    std::cout << "h1 poly:      ";
-    for (slong i = 0; i <= h1.degree(); ++i) {
-        std::cout << std::setw(2) << h1.get_coeff(i);
-        std::cout << " ";
-    }
-    std::cout << std::endl;
-    
-    std::cout << "h1 poly nice: ";
-    h1.print_pretty("x");
-    std::cout << std::endl;
-    
-    std::cout << "h1 inv poly:  ";
-    for (slong i = 0; i <= h1_inv.degree(); ++i) {
-        std::cout << std::setw(2) << h1_inv.get_coeff(i);
-        std::cout << " ";
-    }
-    std::cout << std::endl;
-    
-    std::cout << "h1 inv nice:  ";
-    h1_inv.print_pretty("x");
-    std::cout << std::endl;
-    */
     fmpz_mod_polyxx pol{this->context, k_value};
-    pol.set((h1*h1_inv) % this->mod);
-    // std::cout << "h1_inv is OK:  " << (pol.is_one() ? "true" : "false") << std::endl;
+    pol.set(h1*h1_inv);
+    pol %= this->mod;
 
-    second_block_G.set((h1_inv * h0) % this->mod);
+    std::cout << "h1_inv is OK:  " << (pol.is_one() ? "true" : "false") << std::endl;
+
+    second_block_G.set(h1_inv * h0);
     fmpzxx scalar{-1};
     second_block_G = scalar * second_block_G;
-    /*
-    std::cout << "2nd block G:  ";
-    for (slong i = 0; i <= second_block_G.degree(); ++i) {
-        std::cout << std::setw(2) << second_block_G.get_coeff(i);
-        std::cout << " ";
-    }
-    std::cout << std::endl;
-    */
 };
 
 auto Code::encode(const vector<fmpzxx>& plaintext) -> vector<fmpzxx> {

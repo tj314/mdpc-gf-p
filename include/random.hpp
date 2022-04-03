@@ -30,7 +30,7 @@ private:
     // auto poly_internal(fmpz_mod_polyxx& output, const CodeParams& params, unsigned add_to_first = 0) -> void;
 
     template<typename Poly, typename PolyElem>
-    auto poly_internal(Poly& output, unsigned k, unsigned add_to_first) -> void {
+    auto poly_internal(Poly& output, unsigned k, int minusone, unsigned add_to_first) -> void {
         unsigned third = k / 3;
         unsigned i;
 
@@ -41,7 +41,7 @@ private:
             output.set_coeff(i, 1);
         }
         for (; i < 2*third; ++i) {
-            output.set_coeff(i, -1);
+            output.set_coeff(i, minusone);
         }
         for (; i < k; ++i) {
             output.set_coeff(i, 0);
@@ -76,7 +76,7 @@ public:
     Random(const Random& r) = delete;
     static auto integer(unsigned bound) -> unsigned;
     static auto poly(fmpq_polyxx& output, unsigned k, unsigned add_to_first = 0) -> void;
-    static auto poly(fmpz_mod_polyxx& output, unsigned k, unsigned add_to_first = 0) -> void;
+    static auto poly(fmpz_mod_polyxx& output, unsigned k, unsigned q, unsigned add_to_first = 0) -> void;
     static auto error_vector(unsigned k) -> vector<int>;
     static auto reseed() -> void;
 };

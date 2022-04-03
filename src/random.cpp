@@ -30,11 +30,11 @@ auto Random::integer(unsigned bound) -> unsigned {
 }
 
 auto Random::poly(fmpq_polyxx& output, unsigned k, unsigned add_to_first) -> void {
-    get().poly_internal<fmpq_polyxx, fmpqxx>(output, k, add_to_first);
+    get().poly_internal<fmpq_polyxx, fmpqxx>(output, k, -1, add_to_first);
 }
 
-auto Random::poly(fmpz_mod_polyxx& output, unsigned k, unsigned add_to_first) -> void {
-    get().poly_internal<fmpz_mod_polyxx, fmpzxx>(output, k, add_to_first);
+auto Random::poly(fmpz_mod_polyxx& output, unsigned k, unsigned q, unsigned add_to_first) -> void {
+    get().poly_internal<fmpz_mod_polyxx, fmpzxx>(output, k, q-1, add_to_first);
 }
 
 auto Random::error_vector(unsigned k) -> vector<int> {
