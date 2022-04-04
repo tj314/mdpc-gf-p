@@ -85,6 +85,7 @@ auto Code::init_keys() -> void {
         }
         f = xgcd_result.get<1>();
         f %= modulo;
+        f.canonicalise();
 
         std::cout << "h1^-1: ";
         for (int i = 0; i <= f.degree(); ++i) {
@@ -133,6 +134,7 @@ auto Code::init_keys() -> void {
 
     second_block_G.set(h1_inv * h0);
     fmpzxx scalar{-1};
+    std::cout << "scalar: " << scalar << std::endl;
     second_block_G = scalar * second_block_G;
 };
 

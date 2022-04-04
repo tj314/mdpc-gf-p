@@ -7,3 +7,5 @@ build/
 obj/
 compile_commands.json
 *.plist
+.cproject
+.project

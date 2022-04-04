@@ -1,13 +1,11 @@
 #include <vector>
 #include <iostream>
 #include "protocol.hpp"
-#include "random.hpp"
-
-using std::vector;
-using flint::fmpzxx;
 
 auto main() -> int {
-    unsigned q = 345, k = 491;
+    unsigned q = 27, k = 11;
+    // unsigned q = 8, k = 11;
+    // unsigned q = 512, k = 491;
     Protocol p{q, k};
     std::cout << "keys generated!" << std::endl;
 
