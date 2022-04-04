@@ -5,6 +5,7 @@
 .vim/
 build/
 obj/
+cmake-build-debug/
 compile_commands.json
 *.plist
 .cproject
