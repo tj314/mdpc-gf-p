@@ -1,7 +1,6 @@
 #include "code.hpp"
 
 auto DecodeBounds::set(unsigned q) -> void {
-        this->q = q;
         q_thirds = round(q / 3.0);
         q_2 = q / 2.0;
         q_6 = q / 6.0;
@@ -19,27 +18,17 @@ auto DecodeBounds::set(unsigned q) -> void {
 Code::Code(unsigned q, unsigned k):
     q_value(q),
     k_value(k),
-    q(q),
-    k(k),
-    context(this->q),
-    h0(fmpz_mod_polyxx(this->context, k_value)),
-    h1(fmpz_mod_polyxx(this->context, k_value)),
-    h1_inv(fmpz_mod_polyxx(this->context, k_value)),
-    mod(fmpz_mod_polyxx(this->context, k_value)),
-    second_block_G(fmpz_mod_polyxx(this->context, k_value)),
-    bounds(DecodeBounds{q_value}) {
+    bounds(DecodeBounds()) {
     // http://www.graphics.stanford.edu/~seander/bithacks.html#DetermineIfPowerOf2
     if ((q & (q-1)) != 0 || q == 0) {
         // TODO: compile-time options for throwing exceptions vs printing errors
         std::cout << "Code params: Parameter q is not a power of 2!" << std::endl;
     }
-
-    if (!(this->k).is_probabprime()) {
+    fmpzxx kf{k};
+    if (!kf.is_probabprime()) {
         // TODO: k is probably small enough to test deterministically
         std::cout << "Code params: Parameter k is probably not prime!" << std::endl;
     }
-    mod.set_coeff(0, q - 1);
-    mod.set_coeff(k, 1);
     init_keys();
 }
 
@@ -47,63 +36,57 @@ auto Code::init_keys() -> void {
     bounds.set(q_value);
     unsigned h0_tick = round(q_value / 3.0);
     unsigned h1_tick = round(q_value / 9.0);
-    Random::poly(h0, k_value, q_value, h0_tick);  // coeffs from {-1, 0, 1} in Z_q
 
+    fmpz_modxx_ctx context{q_value};
     fmpq_polyxx h1_tmp, modulo, f;
     fmpz_polyxx numerator;
-    fmpz_mod_polyxx g{context};
-    fmpzxx m, r;
+    fmpz_mod_polyxx g{context}, h0_poly{context, k_value}, h1_poly{context, k_value}, h1_inv{context, k_value}, mod{context}, second_block_G_poly{context};
+    fmpzxx m, r, q{q_value};
+
+
+    // uniformly generate random h0 such that its length is k and its coefficients are from {-1, 0, 1}
+    // then add h0_tick to the first coefficient
+    Random::poly(h0, k_value, h0_tick);
+    while (h0.size() < k_value) {
+        h0.push_back(0);
+    }
+    for (unsigned i = 0; i < h0.size(); ++i) {
+        h0_poly.set_coeff(i, floor_mod(h0.at(i), q_value));
+    }
+
+    // modulo is x^k - 1
     modulo.set_coeff(0, -1);
     modulo.set_coeff(k_value, 1);
-    for (int i = 0; i <= modulo.degree(); ++i)
-        std::cout << modulo.get_coeff(i) << " ";
-    std::cout << std::endl;
+    mod.set_coeff(0, q_value - 1);
+    mod.set_coeff(k_value, 1);
 
+    // now uniformly generate random h1 such that its length is k and its coefficients are from {-1, 0, 1}
+    // then add h1_tick to the first coefficient
+    // additionally, h1 must be invertible
     while (true) {
-        // coeffs from {-1, 0, 1} in Q + h1_prime added to the first coeff
         Random::poly(h1_tmp, k_value, h1_tick);
 
-        std::cout << "h0: ";
-        for (int i = 0; i <= h0.degree(); ++i) {
-            std::cout << h0.get_coeff(i) << " ";
-        }
-        std::cout << std::endl;
-
-        std::cout << "h1: ";
-        for (int i = 0; i <= h1_tmp.degree(); ++i) {
-            std::cout << h1_tmp.get_coeff(i) << " ";
-        }
-        std::cout << std::endl;
         // calculate poly f(x) such that
         // f = h_1^{-1} mod (x^k - 1) in Q[x]
         auto xgcd_result = xgcd(h1_tmp, modulo);
         if (!xgcd_result.get<0>().is_one()) {
             // gcd(h1_tmp, mod) != 1,
             // therefore f does not exist
-            std::cin.ignore();
             continue;
         }
         f = xgcd_result.get<1>();
         f %= modulo;
         f.canonicalise();
 
-        std::cout << "h1^-1: ";
-        for (int i = 0; i <= f.degree(); ++i) {
-            std::cout << f.get_coeff(i) << " ";
-        }
-        std::cout << std::endl;
-
         // let m be denominator of f
         m = f.den();
-        std::cout << "denom is " << m << std::endl;
-        std::cin.ignore();
 
         // calculate r such that
         // r = m^-1 mod q
         auto xgcd_result2 = xgcd(m, q);
         if (!xgcd_result2.get<0>().is_one()) {
             // r does not exist
-            std::cout << "gcd of " << m << " and " << q << " is " << xgcd_result2.get<0>() << std::endl;
+            // std::cout << "gcd of " << m << " and " << q << " is " << xgcd_result2.get<0>() << std::endl;
             continue;
         }
         r = xgcd_result2.get<1>();
@@ -122,126 +105,193 @@ auto Code::init_keys() -> void {
         break;
     }
 
+    if (!h1.empty()) {
+        h1.clear();
+    }
     for (slong i = 0; i <= h1_tmp.degree(); ++i) {
-        h1.set_coeff(i, h1_tmp.get_coeff(i).num());
+        auto coeff = h1_tmp.get_coeff(i).num();
+        int c = (int)coeff.to<slong>();
+        h1.push_back(c);
+        h1_poly.set_coeff(i, coeff);
     }
-
-    fmpz_mod_polyxx pol{this->context, k_value};
-    pol.set(h1*h1_inv);
-    pol %= this->mod;
-
-    std::cout << "h1_inv is OK:  " << (pol.is_one() ? "true" : "false") << std::endl;
-
-    second_block_G.set(h1_inv * h0);
-    fmpzxx scalar{-1};
-    std::cout << "scalar: " << scalar << std::endl;
-    second_block_G = scalar * second_block_G;
-};
-
-auto Code::encode(const vector<fmpzxx>& plaintext) -> vector<fmpzxx> {
-    vector<fmpzxx> ciphertext;
-    fmpzxx tmp{0};
-    // std::cout << "before encode" << std::endl;
-    for (unsigned i = 0; i < k_value; ++i) {
-        tmp = plaintext.at(i) % q;
-        // std::cout << tmp << " ";
-        ciphertext.push_back(tmp);
-    }
-    // std::cout << std::endl;
-    for (unsigned i = k_value; i > 0; --i) {
-        tmp = 0;
-        for (unsigned j = 0; j < k_value; ++j) {
-            tmp += (plaintext.at(j) * second_block_G.get_coeff((i+j) % k_value));
-        }
-        tmp = tmp % q;
-        ciphertext.push_back(tmp);
+    while (h1.size() < k_value) {
+        h1.push_back(0);
     }
 
     /*
-    std::cout << "encode inside: ";
-    for (unsigned i = 0; i < 2*k_value; ++i) {
-        std::cout << ciphertext.at(i) << " ";
-    }
-    std::cout << std::endl;
-    // std::cout << "after encode" << std::endl;
+    fmpz_mod_polyxx pol{context, k_value};
+    pol.set(h1_poly*h1_inv);
+    pol %= mod;
+
+    std::cout << "h1_inv is OK:  " << (pol.is_one() ? "true" : "false") << std::endl;
     */
-    return ciphertext;
-};
-
-/*
-template<typename T>
-auto print_vec(const char * msg, vector<T> vec) -> void {
-    std::cout << msg;
-    for (const T& val : vec) {
-        std::cout << std::setw(2) << val << " ";
+    second_block_G_poly.set(h1_inv * h0_poly);
+    fmpzxx scalar{-1};
+    second_block_G_poly = scalar * second_block_G_poly;
+    /*
+    std::cout << "Keys generated!" << std::endl;
+    std::cout << "h0:      ";
+    for (unsigned i = 0; i < k_value; ++i) {
+        std::cout << h0_poly.get_coeff(i) << " ";
     }
     std::cout << std::endl;
+    std::cout << "h1:      ";
+    for (unsigned i = 0; i < k_value; ++i) {
+        std::cout << h1_poly.get_coeff(i) << " ";
+    }
+    std::cout << std::endl;
+    */
+    if (!second_block_G.empty()) {
+        second_block_G.clear();
+    }
+    for (slong i = 0; i <= second_block_G_poly.degree(); ++i) {
+        second_block_G.push_back(second_block_G_poly.get_coeff(i).to<slong>());
+    }
+    while (second_block_G.size() < k_value) {
+        second_block_G.push_back(0);
+    }
 }
-*/
 
-auto Code::decode(const vector<fmpzxx>& ciphertext, unsigned num_iterations) -> optional<vector<fmpzxx>> {
-    vector<fmpzxx> error_vector{2*k_value, fmpzxx{0}};
-    vector<fmpzxx> syndrome = calculate_syndrome(ciphertext);
+auto Code::encode(const vector<long>& plaintext) -> vector<unsigned> {
+    vector<unsigned> encoded;
+    long tmp = 0;
+    for (unsigned i = 0; i < k_value; ++i) {
+        tmp = plaintext.at(i) % q_value;
+        if (tmp < 0)
+            tmp += q_value;
+        encoded.push_back(tmp);
+    }
+
+    for (unsigned i = k_value; i > 0; --i) {
+        tmp = 0;
+        for (unsigned j = 0; j < k_value; ++j) {
+            tmp += (plaintext.at(j) * second_block_G.at((i+j) % k_value));
+        }
+        tmp = tmp % q_value;
+        if (tmp < 0) {
+            tmp += q_value;
+        }
+        encoded.push_back((unsigned)tmp);
+    }
+
+    std::cout << "G:       ";
+    for (unsigned i = 0; i < k_value; ++i) {
+        std::cout << second_block_G.at(i) << " ";
+    }
+    std::cout << std::endl;
+
+    std::cout << "plain:   ";
+    for (unsigned i = 0; i < k_value; ++i) {
+        std::cout << plaintext.at(i) << " ";
+    }
+    std::cout << std::endl;
+
+    std::cout << "encoded: ";
+    for (unsigned i = 0; i < 2*k_value; ++i) {
+        std::cout << encoded.at(i) << " ";
+    }
+    std::cout << std::endl;
+    return encoded;
+}
+
+auto Code::decode(const vector<long>& ciphertext, unsigned num_iterations) -> optional<vector<long>> {
+    vector<unsigned> syndrome = calculate_syndrome(ciphertext);
+    vector<long> error_vector(2*k_value, 0);
+
+    std::cout << "syndr:   ";
+    for (const unsigned & i: syndrome) {
+        std::cout << i << " ";
+    }
+    std::cout << std::endl;
+
     bool syndrome_is_zero = true;
     for (unsigned i = 0; i < k_value; ++i) {
-        syndrome_is_zero = syndrome_is_zero && syndrome.at(i).is_zero();
+        syndrome_is_zero = syndrome_is_zero && (syndrome.at(i) == 0);
     }
     if (syndrome_is_zero) {
         return error_vector;
     }
-    vector<fmpzxx> p{syndrome};
-    vector<fmpzxx> esyn;
-    fmpzxx tmp;
+    vector<unsigned> p(syndrome);
+    std::cout << "psyndr:  ";
+    for (const unsigned & i: p) {
+        std::cout << i << " ";
+    }
+    std::cout << std::endl;
+    vector<unsigned> esyn;
+    long tmp;
     // std::cout << "DECODING:" << std::endl;
     // print_vec("\tsyndrome before: ", p);
     for (unsigned iter = 0; iter < num_iterations; ++iter) {
         // std::cout << "Iteration " << iter << std::endl;
         decide(error_vector, p);
+        std::cout << "errvec:  ";
+        for (const long& i: error_vector) {
+            std::cout << i << " ";
+        }
+        std::cout << std::endl;
         transform(error_vector);
+        std::cout << "errvec:  ";
+        for (const long& i: error_vector) {
+            std::cout << i << " ";
+        }
+        std::cout << std::endl;
         esyn = calculate_syndrome(error_vector);
-        // print_vec("\terror vector:    ", error_vector);
+        std::cout << "esyn:    ";
+        for (const unsigned & i: esyn) {
+            std::cout << i << " ";
+        }
+        std::cout << std::endl;
 
-        // p = s - He^T
+        // p = s - He^T = s - esyn
         syndrome_is_zero = true;
         for (unsigned i = 0; i < k_value; ++i) {
-            tmp = syndrome.at(i) - esyn.at(i);
-            tmp %= q;
+            tmp = (long)syndrome.at(i) - (long)esyn.at(i);
+            tmp %= q_value;
+            if (tmp < 0) {
+                tmp += q_value;
+            }
             p.at(i) = tmp;
-            syndrome_is_zero = p.at(i).is_zero() && syndrome_is_zero;
+            syndrome_is_zero = (p.at(i) == 0) && syndrome_is_zero;
         }
-        // print_vec("\tsyndrome after:  ", p);
         
         if (syndrome_is_zero) {
             return error_vector;
         }
+        std::cout << "iter" << std::endl;
     }
 
     return {};
 }
 
-auto Code::calculate_syndrome(const vector<fmpzxx>& ciphertext) -> vector<fmpzxx> {
-    vector<fmpzxx> syndrome;
-    fmpzxx tmp;
+auto Code::calculate_syndrome(const vector<long>& ciphertext) -> vector<unsigned> {
+    vector<unsigned> syndrome;
+    long tmp;
     for (unsigned i = k_value; i > 0; --i) {
         tmp = 0;
         for (unsigned j = 0; j < k_value; ++j) {
-            tmp += (h0.get_coeff((i + j) % k_value) * ciphertext.at(j));
+            tmp += (h0.at((i + j) % k_value) * ciphertext.at(j));
         }
-        tmp %= q;
+        tmp %= q_value;
+        if (tmp < 0) {
+            tmp += q_value;
+        }
         for (unsigned j = 0; j < k_value; ++j) {
-            tmp += (h1.get_coeff((i + j) % k_value) * ciphertext.at(k_value + j));
+            tmp += (h1.at((i + j) % k_value) * ciphertext.at(k_value + j));
         }
-        tmp = tmp % q;
-        syndrome.push_back(tmp);
+        tmp = tmp % q_value;
+        if (tmp < 0) {
+            tmp += q_value;
+        }
+        syndrome.push_back((unsigned)tmp);
     }
     return syndrome;
 }
 
-auto Code::decide(vector<fmpzxx>& error_vector, const vector<fmpzxx>& syndrome) -> void {
+auto Code::decide(vector<long>& error_vector, const vector<unsigned>& syndrome) const -> void {
     // std::cout << "err_len, syn_len: " << error_vector.size() << " " << syndrome.size() << std::endl;
 
     for (unsigned i = 0; i < k_value; ++i) {
-        unsigned p_i = syndrome.at(i).to<ulong>();
+        unsigned p_i = syndrome.at(i);
 
         if (p_i >= bounds.b1 && p_i <= bounds.b2) {
             // e'_i = 1
@@ -262,9 +312,9 @@ auto Code::decide(vector<fmpzxx>& error_vector, const vector<fmpzxx>& syndrome) 
     }
 }
 
-auto Code::transform(vector<fmpzxx>& error_vetor) -> void {
+auto Code::transform(vector<long>& error_vector) const -> void {
     for (unsigned i = 0; i < 2*k_value; ++i) {
-        fmpzxx& val = error_vetor.at(i);
+        long& val = error_vector.at(i);
         if (val == 2) {
             val = -1;
         } else if (val == -2) {

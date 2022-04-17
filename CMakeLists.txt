@@ -8,7 +8,8 @@ add_executable(mdpc-gf-p
         ${CMAKE_SOURCE_DIR}/src/main.cpp
         ${CMAKE_SOURCE_DIR}/src/code.cpp
         ${CMAKE_SOURCE_DIR}/src/protocol.cpp
-        ${CMAKE_SOURCE_DIR}/src/random.cpp)
+        ${CMAKE_SOURCE_DIR}/src/random.cpp
+        ${CMAKE_SOURCE_DIR}/src/utils.cpp)
 
 target_include_directories(mdpc-gf-p PRIVATE /usr/include/flint)
 

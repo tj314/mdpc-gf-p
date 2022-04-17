@@ -3,9 +3,9 @@
 #include "protocol.hpp"
 
 auto main() -> int {
-    unsigned q = 27, k = 11;
+    // unsigned q = 18, k = 11;
     // unsigned q = 8, k = 11;
-    // unsigned q = 512, k = 491;
+    unsigned q = 512, k = 41;
     Protocol p{q, k};
     std::cout << "keys generated!" << std::endl;
 

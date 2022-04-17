@@ -7,41 +7,22 @@ auto Protocol::encrypt(const vector<unsigned>& plaintext, bool verbose) -> optio
         }
         return {};
     }
-    vector<fmpzxx> vec;
+    vector<long> vec;
     for (unsigned i = 0; i < k; ++i) {
-        vec.push_back(fmpzxx{plaintext.at(i)});
+        vec.push_back((long)plaintext.at(i));
     }
-    vector<fmpzxx> encoded = c.encode(vec);
+    vector<unsigned> encoded = c.encode(vec);
     vector<int> error_vector = Random::error_vector(k);
-    /*
-    std::cout << "Error_vector: ";
-    for (int val : error_vector) {
-        std::cout << std::setw(2) << val << " ";
-    }
-    std::cout << std::endl;
-    std::cout << "Encoded:      ";
-    for (const fmpzxx& val : encoded) {
-        std::cout << std::setw(2) << val << " ";
-    }
-    std::cout << std::endl;
-    */
     vector<unsigned> encrypted;
     long tmp;
     for (unsigned i = 0; i < 2*k; ++i) {
-        tmp = (long)encoded.at(i).to<slong>();
-        tmp += error_vector.at(i);
-        if (tmp == -1l) {
+        tmp = (long)encoded.at(i) + error_vector.at(i);
+        tmp %= q;
+        if (tmp < 0) {
             tmp += q;
         }
-        encrypted.push_back(tmp % q);
+        encrypted.push_back(tmp);
     }
-    /*
-    std::cout << "Encrypted:    ";
-    for (unsigned val : encrypted) {
-        std::cout << std::setw(2) << val << " ";
-    }
-    std::cout << std::endl;
-    */
     return encrypted;
 }
 
@@ -53,10 +34,14 @@ auto Protocol::decrypt(const vector<unsigned>& ciphertext, unsigned num_iteratio
         return {};
     }
 
-    vector<fmpzxx> ctext;
-    for (unsigned val : ciphertext) {
-        ctext.push_back(fmpzxx{val});
-    }
+    std::cout << "encrypt: ";
+    for (const unsigned & i: ciphertext)
+        std::cout << i << " ";
+    std::cout << std::endl;
+
+    vector<long> ctext;
+    for (unsigned v: ciphertext)
+        ctext.push_back(v);
 
     auto maybe_error_vector = c.decode(ctext, num_iterations);
     if (!maybe_error_vector) {
@@ -67,11 +52,15 @@ auto Protocol::decrypt(const vector<unsigned>& ciphertext, unsigned num_iteratio
     }
 
     vector<unsigned> plaintext;
-    fmpzxx tmp, mod{q};
+    long tmp;
     auto for_sure_error_vector = maybe_error_vector.value();
     for (unsigned i = 0; i < k; ++i) {
-        tmp = ctext.at(i) - for_sure_error_vector.at(i);
-        plaintext.push_back((unsigned)(tmp % mod).to<ulong>());
+        tmp = ciphertext.at(i) - for_sure_error_vector.at(i);
+        tmp %= q;
+        if (tmp < 0) {
+            tmp += q;
+        }
+        plaintext.push_back((unsigned)tmp);
     }
     return plaintext;
 }

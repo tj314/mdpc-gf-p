@@ -21,6 +21,6 @@ private:
 public:
     Protocol(unsigned q, unsigned k): q(q), k(k), c(Code{q, k}) {}
     auto encrypt(const vector<unsigned>& plaintext, bool verbose=false) -> optional<vector<unsigned>>;
-    auto decrypt(const vector<unsigned>& ciphertext, unsigned num_iterations=10, bool verbose=false) -> optional<vector<unsigned>>;
+    auto decrypt(const vector<unsigned >& ciphertext, unsigned num_iterations=10, bool verbose=false) -> optional<vector<unsigned>>;
 };
 #endif
