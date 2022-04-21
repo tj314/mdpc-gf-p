@@ -56,10 +56,7 @@ auto Protocol::decrypt(const vector<unsigned>& ciphertext, unsigned num_iteratio
     auto for_sure_error_vector = maybe_error_vector.value();
     for (unsigned i = 0; i < k; ++i) {
         tmp = ciphertext.at(i) - for_sure_error_vector.at(i);
-        tmp %= q;
-        if (tmp < 0) {
-            tmp += q;
-        }
+        tmp = floor_mod(tmp, q);
         plaintext.push_back((unsigned)tmp);
     }
     return plaintext;

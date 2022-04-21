@@ -241,10 +241,7 @@ auto Code::decode(const vector<long>& ciphertext, unsigned num_iterations) -> op
         syndrome_is_zero = true;
         for (unsigned i = 0; i < k_value; ++i) {
             tmp = (long)syndrome.at(i) - (long)esyn.at(i);
-            tmp %= q_value;
-            if (tmp < 0) {
-                tmp += q_value;
-            }
+            tmp = floor_mod(tmp, q_value);
             p.at(i) = tmp;
             syndrome_is_zero = (p.at(i) == 0) && syndrome_is_zero;
         }
@@ -264,19 +261,13 @@ auto Code::calculate_syndrome(const vector<long>& ciphertext) -> vector<unsigned
     for (unsigned i = k_value; i > 0; --i) {
         tmp = 0;
         for (unsigned j = 0; j < k_value; ++j) {
-            tmp += (h0.at((i + j) % k_value) * ciphertext.at(j));
+            tmp += (h0.at(floor_mod(i + j, k_value)) * ciphertext.at(j));
         }
-        tmp %= q_value;
-        if (tmp < 0) {
-            tmp += q_value;
-        }
+        tmp = floor_mod(tmp, q_value);
         for (unsigned j = 0; j < k_value; ++j) {
-            tmp += (h1.at((i + j) % k_value) * ciphertext.at(k_value + j));
+            tmp += (h1.at(floor_mod(i + j, k_value)) * ciphertext.at(k_value + j));
         }
-        tmp = tmp % q_value;
-        if (tmp < 0) {
-            tmp += q_value;
-        }
+        tmp = floor_mod(tmp, q_value);
         syndrome.push_back((unsigned)tmp);
     }
     return syndrome;
