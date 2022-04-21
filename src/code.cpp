@@ -156,21 +156,16 @@ auto Code::encode(const vector<long>& plaintext) -> vector<unsigned> {
     vector<unsigned> encoded;
     long tmp = 0;
     for (unsigned i = 0; i < k_value; ++i) {
-        tmp = plaintext.at(i) % q_value;
-        if (tmp < 0)
-            tmp += q_value;
+        tmp = floor_mod(plaintext.at(i), q_value);
         encoded.push_back(tmp);
     }
 
     for (unsigned i = k_value; i > 0; --i) {
         tmp = 0;
         for (unsigned j = 0; j < k_value; ++j) {
-            tmp += (plaintext.at(j) * second_block_G.at((i+j) % k_value));
+            tmp += (plaintext.at(j) * second_block_G.at(floor_mod(i+j, k_value)));
         }
-        tmp = tmp % q_value;
-        if (tmp < 0) {
-            tmp += q_value;
-        }
+        tmp = floor_mod(tmp, q_value);
         encoded.push_back((unsigned)tmp);
     }
 
