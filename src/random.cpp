@@ -59,6 +59,12 @@ auto Random::poly(fmpq_polyxx& output, unsigned k, unsigned add_to_first) -> voi
     for (unsigned i = 0; i < k; ++i) {
         output.set_coeff(i, ((slong)poly.at(i)));
     }
+    /*
+    for (unsigned i = 0; i < k; ++i) {
+        std::cout << output.get_coeff(i) << " ";
+    }
+    std::cout << std::endl;
+    */
 }
 
 auto Random::poly(fmpz_mod_polyxx& output, unsigned k, unsigned q, unsigned add_to_first) -> void {

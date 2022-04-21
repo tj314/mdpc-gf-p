@@ -46,7 +46,7 @@ auto Code::init_keys() -> void {
 
     // uniformly generate random h0 such that its length is k and its coefficients are from {-1, 0, 1}
     // then add h0_tick to the first coefficient
-    Random::poly(h0, k_value, h0_tick);
+    Random::poly(h0, k_value, q_value, h0_tick);
     while (h0.size() < k_value) {
         h0.push_back(0);
     }
@@ -111,20 +111,20 @@ auto Code::init_keys() -> void {
     for (slong i = 0; i <= h1_tmp.degree(); ++i) {
         auto coeff = h1_tmp.get_coeff(i).num();
         int c = (int)coeff.to<slong>();
-        h1.push_back(c);
+        h1.push_back((unsigned)floor_mod(c, q_value));
         h1_poly.set_coeff(i, coeff);
     }
     while (h1.size() < k_value) {
         h1.push_back(0);
     }
 
-    /*
+
     fmpz_mod_polyxx pol{context, k_value};
     pol.set(h1_poly*h1_inv);
     pol %= mod;
 
     std::cout << "h1_inv is OK:  " << (pol.is_one() ? "true" : "false") << std::endl;
-    */
+
     second_block_G_poly.set(h1_inv * h0_poly);
     fmpzxx scalar{-1};
     second_block_G_poly = scalar * second_block_G_poly;
@@ -145,7 +145,7 @@ auto Code::init_keys() -> void {
         second_block_G.clear();
     }
     for (slong i = 0; i <= second_block_G_poly.degree(); ++i) {
-        second_block_G.push_back(second_block_G_poly.get_coeff(i).to<slong>());
+        second_block_G.push_back(floor_mod(second_block_G_poly.get_coeff(i).to<slong>(), q_value));
     }
     while (second_block_G.size() < k_value) {
         second_block_G.push_back(0);
