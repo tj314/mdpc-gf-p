@@ -199,6 +199,17 @@ auto Code::decode(const vector<long>& ciphertext, unsigned num_iterations) -> op
     }
     std::cout << std::endl;
 
+    std::cout << "h0:      ";
+    for (unsigned i: h0) {
+        std::cout << i << " ";
+    }
+    std::cout << std::endl;
+    std::cout << "h1:      ";
+    for (unsigned i: h1) {
+        std::cout << i << " ";
+    }
+    std::cout << std::endl;
+
     bool syndrome_is_zero = true;
     for (unsigned i = 0; i < k_value; ++i) {
         syndrome_is_zero = syndrome_is_zero && (syndrome.at(i) == 0);

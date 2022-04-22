@@ -3,7 +3,7 @@
 #include "protocol.hpp"
 
 auto main() -> int {
-    unsigned q = 512, k = 11;
+    unsigned q = 512, k = 509;
     // unsigned q = 8, k = 11;
     // unsigned q = 512, k = 41;
     Protocol p{q, k};
