@@ -29,6 +29,8 @@ Code::Code(unsigned q, unsigned k):
         // TODO: k is probably small enough to test deterministically
         std::cout << "Code params: Parameter k is probably not prime!" << std::endl;
     }
+    h0.reserve(k_value);
+    h1.reserve(k_value);
     init_keys();
 }
 
@@ -37,103 +39,16 @@ auto Code::init_keys() -> void {
     unsigned h0_tick = round(q_value / 3.0);
     unsigned h1_tick = round(q_value / 9.0);
 
-    fmpz_modxx_ctx context{q_value};
-    fmpq_polyxx h1_tmp, modulo, f;
-    fmpz_polyxx numerator;
-    fmpz_mod_polyxx g{context}, h0_poly{context, k_value}, h1_poly{context, k_value}, h1_inv{context, k_value}, mod{context}, second_block_G_poly{context};
-    fmpzxx m, r, q{q_value};
-
-
-    // uniformly generate random h0 such that its length is k and its coefficients are from {-1, 0, 1}
-    // then add h0_tick to the first coefficient
-    Random::poly(h0, k_value, q_value, h0_tick);
-    while (h0.size() < k_value) {
-        h0.push_back(0);
-    }
-    for (unsigned i = 0; i < h0.size(); ++i) {
-        h0_poly.set_coeff(i, floor_mod(h0.at(i), q_value));
+    h0.clear();
+    h1.clear();
+    for (unsigned i = 0; i < k_value; ++i) {
+        h0.push_back(floor_mod(((int)Random::integer(3)) - 1, q_value));
+        h1.push_back(floor_mod(((int)Random::integer(3)) - 1, q_value));
     }
 
-    // modulo is x^k - 1
-    modulo.set_coeff(0, -1);
-    modulo.set_coeff(k_value, 1);
-    mod.set_coeff(0, q_value - 1);
-    mod.set_coeff(k_value, 1);
+    h0.at(0) += h0_tick;
+    h1.at(0) += h1_tick;
 
-    // now uniformly generate random h1 such that its length is k and its coefficients are from {-1, 0, 1}
-    // then add h1_tick to the first coefficient
-    // additionally, h1 must be invertible
-    while (true) {
-        Random::poly(h1_tmp, k_value, h1_tick);
-
-        // calculate poly f(x) such that
-        // f = h_1^{-1} mod (x^k - 1) in Q[x]
-        auto xgcd_result = xgcd(h1_tmp, modulo);
-        if (!xgcd_result.get<0>().is_one()) {
-            // gcd(h1_tmp, mod) != 1,
-            // therefore f does not exist
-            continue;
-        }
-        f = xgcd_result.get<1>();
-        f %= modulo;
-        f.canonicalise();
-
-        // let m be denominator of f
-        m = f.den();
-
-        // calculate r such that
-        // r = m^-1 mod q
-        auto xgcd_result2 = xgcd(m, q);
-        if (!xgcd_result2.get<0>().is_one()) {
-            // r does not exist
-            continue;
-        }
-        r = xgcd_result2.get<1>();
-
-        // calculate poly g(x) such that
-        // g(x) = m*f(x) mod q
-        // TODO: there must be a better way to access the entire numerator
-        for (slong i = 0; i <= f.degree(); ++i) {
-            g.set_coeff(i, f.get_coeff(i).num());
-        }
-
-        // calculate poly h(x) such that
-        // h(x) = r*g(x) mod q
-        // then h(x) is h^{-1}(x) in Z_q[x]/(x^k - 1)
-        h1_inv = r * g;
-        break;
-    }
-
-    if (!h1.empty()) {
-        h1.clear();
-    }
-    for (slong i = 0; i <= h1_tmp.degree(); ++i) {
-        auto coeff = h1_tmp.get_coeff(i).num();
-        int c = (int)coeff.to<slong>();
-        h1.push_back((unsigned)floor_mod(c, q_value));
-        h1_poly.set_coeff(i, coeff);
-    }
-    while (h1.size() < k_value) {
-        h1.push_back(0);
-    }
-
-    fmpz_mod_polyxx pol{context, k_value};
-    pol.set(h1_poly*h1_inv);
-    pol %= mod;
-
-    if (!pol.is_one())
-        throw "Error: generated h1_inverse is incorrect!";
-
-    second_block_G_poly.set(h1_inv * h0_poly);
-    fmpzxx scalar{-1};
-    second_block_G_poly = scalar * second_block_G_poly;
-
-    if (!second_block_G.empty()) {
-        second_block_G.clear();
-    }
-    for (slong i = 0; i <= second_block_G_poly.degree(); ++i) {
-        second_block_G.push_back(floor_mod(second_block_G_poly.get_coeff(i).to<slong>(), q_value));
-    }
     while (second_block_G.size() < k_value) {
         second_block_G.push_back(0);
     }

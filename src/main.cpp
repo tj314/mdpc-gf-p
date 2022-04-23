@@ -1,46 +1,28 @@
 #include <vector>
 #include <iostream>
-#include "protocol.hpp"
+#include "code.hpp"
 
 auto main() -> int {
-    unsigned q = 512, k = 509;
-    // unsigned q = 8, k = 11;
-    // unsigned q = 512, k = 41;
-    Protocol p{q, k};
-    std::cout << "keys generated!" << std::endl;
+    unsigned q = 345, k = 491;
+    unsigned num_instances = 1000;
+    unsigned num_runs = 1000;
+    unsigned num_iters = 25;
 
-    vector<unsigned> plaintext;
-    for (unsigned i = 0; i < k; ++i) {
-        plaintext.push_back(Random::integer(q));
-    }
+    vector<long> ciphertext(k*2, 0);
 
-    auto maybe_encrypted = p.encrypt(plaintext, true);
-    if (!maybe_encrypted) {
-        std::cerr << "Encryption failed!" << std::endl;
-        return -1;
-    }
-    auto ciphertext = maybe_encrypted.value();
-
-    auto maybe_decrypted = p.decrypt(ciphertext, 100, true);
-    if (!maybe_decrypted) {
-        std::cerr << "Decryption failed!" << std::endl;
-        return -1;
-    }
-    auto decrypted = maybe_decrypted.value();
-
-    if (decrypted.size() != plaintext.size()) {
-        std::cerr << "Decryption failed: invalid length of decrypted vector!" << std::endl;
-    } else {
-        bool different = false;
-        for (int i = 0; i < plaintext.size(); ++i) {
-            if (plaintext.at(i) != decrypted.at(i)) {
-                std::cerr << "Decryption failed: decrypted vector differs from the original plaintext!" << std::endl;
-                different = true;
-                break;
+    for (unsigned i = 0; i < num_instances; ++i) {
+        Code code{q, k};
+        for (unsigned j = 0; j < num_runs; ++j) {
+            for (unsigned it = 0; it < k; ++it) {
+                ciphertext.at(it) = floor_mod(((int)Random::integer(3)) - 1, q);
             }
-        }
-        if (!different) {
-            std::cout << "Encryption and decryption OK!" << std::endl;
+
+            auto maybe_decrypted = code.decode(ciphertext, num_iters);
+            if (!maybe_decrypted) {
+                std::cout << "Decryption failure!" << std::endl;
+            } else {
+                std::cout << "Decryption success!" << std::endl;
+            }
         }
     }
     return 0;
