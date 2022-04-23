@@ -86,7 +86,6 @@ auto Code::init_keys() -> void {
         auto xgcd_result2 = xgcd(m, q);
         if (!xgcd_result2.get<0>().is_one()) {
             // r does not exist
-            // std::cout << "gcd of " << m << " and " << q << " is " << xgcd_result2.get<0>() << std::endl;
             continue;
         }
         r = xgcd_result2.get<1>();
@@ -118,29 +117,17 @@ auto Code::init_keys() -> void {
         h1.push_back(0);
     }
 
-
     fmpz_mod_polyxx pol{context, k_value};
     pol.set(h1_poly*h1_inv);
     pol %= mod;
 
-    std::cout << "h1_inv is OK:  " << (pol.is_one() ? "true" : "false") << std::endl;
+    if (!pol.is_one())
+        throw "Error: generated h1_inverse is incorrect!";
 
     second_block_G_poly.set(h1_inv * h0_poly);
     fmpzxx scalar{-1};
     second_block_G_poly = scalar * second_block_G_poly;
-    /*
-    std::cout << "Keys generated!" << std::endl;
-    std::cout << "h0:      ";
-    for (unsigned i = 0; i < k_value; ++i) {
-        std::cout << h0_poly.get_coeff(i) << " ";
-    }
-    std::cout << std::endl;
-    std::cout << "h1:      ";
-    for (unsigned i = 0; i < k_value; ++i) {
-        std::cout << h1_poly.get_coeff(i) << " ";
-    }
-    std::cout << std::endl;
-    */
+
     if (!second_block_G.empty()) {
         second_block_G.clear();
     }
@@ -168,47 +155,12 @@ auto Code::encode(const vector<long>& plaintext) -> vector<unsigned> {
         tmp = floor_mod(tmp, q_value);
         encoded.push_back((unsigned)tmp);
     }
-
-    std::cout << "G:       ";
-    for (unsigned i = 0; i < k_value; ++i) {
-        std::cout << second_block_G.at(i) << " ";
-    }
-    std::cout << std::endl;
-
-    std::cout << "plain:   ";
-    for (unsigned i = 0; i < k_value; ++i) {
-        std::cout << plaintext.at(i) << " ";
-    }
-    std::cout << std::endl;
-
-    std::cout << "encoded: ";
-    for (unsigned i = 0; i < 2*k_value; ++i) {
-        std::cout << encoded.at(i) << " ";
-    }
-    std::cout << std::endl;
     return encoded;
 }
 
 auto Code::decode(const vector<long>& ciphertext, unsigned num_iterations) -> optional<vector<long>> {
     vector<unsigned> syndrome = calculate_syndrome(ciphertext);
     vector<long> error_vector(2*k_value, 0);
-
-    std::cout << "syndr:   ";
-    for (const unsigned & i: syndrome) {
-        std::cout << i << " ";
-    }
-    std::cout << std::endl;
-
-    std::cout << "h0:      ";
-    for (unsigned i: h0) {
-        std::cout << i << " ";
-    }
-    std::cout << std::endl;
-    std::cout << "h1:      ";
-    for (unsigned i: h1) {
-        std::cout << i << " ";
-    }
-    std::cout << std::endl;
 
     bool syndrome_is_zero = true;
     for (unsigned i = 0; i < k_value; ++i) {
@@ -217,36 +169,15 @@ auto Code::decode(const vector<long>& ciphertext, unsigned num_iterations) -> op
     if (syndrome_is_zero) {
         return error_vector;
     }
+
     vector<unsigned> p(syndrome);
-    std::cout << "psyndr:  ";
-    for (const unsigned & i: p) {
-        std::cout << i << " ";
-    }
-    std::cout << std::endl;
     vector<unsigned> esyn;
     long tmp;
-    // std::cout << "DECODING:" << std::endl;
-    // print_vec("\tsyndrome before: ", p);
+
     for (unsigned iter = 0; iter < num_iterations; ++iter) {
-        // std::cout << "Iteration " << iter << std::endl;
         decide(error_vector, p);
-        std::cout << "errvec:  ";
-        for (const long& i: error_vector) {
-            std::cout << i << " ";
-        }
-        std::cout << std::endl;
         transform(error_vector);
-        std::cout << "errvec:  ";
-        for (const long& i: error_vector) {
-            std::cout << i << " ";
-        }
-        std::cout << std::endl;
         esyn = calculate_syndrome(error_vector);
-        std::cout << "esyn:    ";
-        for (const unsigned & i: esyn) {
-            std::cout << i << " ";
-        }
-        std::cout << std::endl;
 
         // p = s - He^T = s - esyn
         syndrome_is_zero = true;
@@ -260,7 +191,6 @@ auto Code::decode(const vector<long>& ciphertext, unsigned num_iterations) -> op
         if (syndrome_is_zero) {
             return error_vector;
         }
-        std::cout << "iter" << std::endl;
     }
 
     return {};
@@ -285,8 +215,6 @@ auto Code::calculate_syndrome(const vector<long>& ciphertext) -> vector<unsigned
 }
 
 auto Code::decide(vector<long>& error_vector, const vector<unsigned>& syndrome) const -> void {
-    // std::cout << "err_len, syn_len: " << error_vector.size() << " " << syndrome.size() << std::endl;
-
     for (unsigned i = 0; i < k_value; ++i) {
         unsigned p_i = syndrome.at(i);
 

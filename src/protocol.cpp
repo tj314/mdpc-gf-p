@@ -34,11 +34,6 @@ auto Protocol::decrypt(const vector<unsigned>& ciphertext, unsigned num_iteratio
         return {};
     }
 
-    std::cout << "encrypt: ";
-    for (const unsigned & i: ciphertext)
-        std::cout << i << " ";
-    std::cout << std::endl;
-
     vector<long> ctext;
     for (unsigned v: ciphertext)
         ctext.push_back(v);
