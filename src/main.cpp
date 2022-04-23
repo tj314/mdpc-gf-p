@@ -21,6 +21,17 @@ auto main() -> int {
             if (!maybe_decrypted) {
                 std::cout << "Decryption failure!" << std::endl;
             } else {
+                auto err_vec = maybe_decrypted.value();
+                if (err_vec.size() != ciphertext.size()) {
+                    std::cout << "Decryption failure! err_vec is of different length" << std::endl;
+                    continue;
+                }
+                for (unsigned it = 0; it < err_vec.size(); ++it) {
+                    if (floor_mod(err_vec.at(it), q) != ciphertext.at(it)) {
+                        std::cout << "Decryption failure! err_vec differs" << std::endl;
+                        continue;
+                    }
+                }
                 std::cout << "Decryption success!" << std::endl;
             }
         }

@@ -17,7 +17,7 @@ auto Random::error_vector_internal(unsigned k) -> vector<int> {
     vector<int> error_vector;
 
     for (unsigned i = 0; i < 2*k; ++i) {
-        error_vector.push_back((int)(this->integer_internal(3)) - 1);
+        error_vector.push_back(((int)this->integer_internal(3)) - 1);
     }
 
     return error_vector;
