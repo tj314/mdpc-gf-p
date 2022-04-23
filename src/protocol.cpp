@@ -17,10 +17,7 @@ auto Protocol::encrypt(const vector<unsigned>& plaintext, bool verbose) -> optio
     long tmp;
     for (unsigned i = 0; i < 2*k; ++i) {
         tmp = (long)encoded.at(i) + error_vector.at(i);
-        tmp %= q;
-        if (tmp < 0) {
-            tmp += q;
-        }
+        floor_mod(tmp, q);
         encrypted.push_back(tmp);
     }
     return encrypted;
