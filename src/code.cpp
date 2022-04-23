@@ -43,6 +43,9 @@ auto Code::init_keys() -> void {
     fmpz_mod_polyxx g{context}, h0_poly{context, k_value}, h1_poly{context, k_value}, h1_inv{context, k_value}, mod{context}, second_block_G_poly{context};
     fmpzxx m, r, q{q_value};
 
+    if (!h0.empty()) {
+        h0.clear();
+    }
 
     // uniformly generate random h0 such that its length is k and its coefficients are from {-1, 0, 1}
     // then add h0_tick to the first coefficient
@@ -60,6 +63,7 @@ auto Code::init_keys() -> void {
     mod.set_coeff(0, q_value - 1);
     mod.set_coeff(k_value, 1);
 
+    REGEN:
     // now uniformly generate random h1 such that its length is k and its coefficients are from {-1, 0, 1}
     // then add h1_tick to the first coefficient
     // additionally, h1 must be invertible
@@ -121,12 +125,15 @@ auto Code::init_keys() -> void {
     pol.set(h1_poly*h1_inv);
     pol %= mod;
 
-    if (!pol.is_one())
-        throw "Error: generated h1_inverse is incorrect!";
+    if (!pol.is_one()) {
+        std::cerr << "WTF?" << std::endl;
+        goto REGEN;
+    }
 
     second_block_G_poly.set(h1_inv * h0_poly);
     fmpzxx scalar{-1};
     second_block_G_poly = scalar * second_block_G_poly;
+    second_block_G_poly = second_block_G_poly % mod;
 
     if (!second_block_G.empty()) {
         second_block_G.clear();

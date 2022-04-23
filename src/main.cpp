@@ -3,45 +3,54 @@
 #include "protocol.hpp"
 
 auto main() -> int {
-    unsigned q = 512, k = 509;
-    // unsigned q = 8, k = 11;
-    // unsigned q = 512, k = 41;
-    Protocol p{q, k};
-    std::cout << "keys generated!" << std::endl;
+    unsigned q = 512, k = 491;
+    unsigned num_instances = 1000;
+    unsigned num_runs = 1000;
+    unsigned num_iters = 25;
 
-    vector<unsigned> plaintext;
-    for (unsigned i = 0; i < k; ++i) {
-        plaintext.push_back(Random::integer(q));
-    }
+    unsigned num_failures = 0;
 
-    auto maybe_encrypted = p.encrypt(plaintext, true);
-    if (!maybe_encrypted) {
-        std::cerr << "Encryption failed!" << std::endl;
-        return -1;
-    }
-    auto ciphertext = maybe_encrypted.value();
+    vector<unsigned> plaintext(k, 0);
+    for (unsigned instance = 0; instance < num_instances; ++instance) {
+        Protocol p{q, k};
+        std::cerr << "Instance " << instance + 1 << " of " << num_instances << std::endl;
 
-    auto maybe_decrypted = p.decrypt(ciphertext, 100, true);
-    if (!maybe_decrypted) {
-        std::cerr << "Decryption failed!" << std::endl;
-        return -1;
-    }
-    auto decrypted = maybe_decrypted.value();
+        for (unsigned run = 0; run < num_runs; ++run) {
+            for (unsigned i = 0; i < k; ++i) {
+                plaintext.at(i) = Random::integer(q);
+            }
 
-    if (decrypted.size() != plaintext.size()) {
-        std::cerr << "Decryption failed: invalid length of decrypted vector!" << std::endl;
-    } else {
-        bool different = false;
-        for (int i = 0; i < plaintext.size(); ++i) {
-            if (plaintext.at(i) != decrypted.at(i)) {
-                std::cerr << "Decryption failed: decrypted vector differs from the original plaintext!" << std::endl;
-                different = true;
-                break;
+            auto ciphertext = p.encrypt(plaintext, false).value();
+
+            auto maybe_decrypted = p.decrypt(ciphertext, num_iters, false);
+            if (!maybe_decrypted) {
+                std::cout << "Decryption failed!" << std::endl;
+                num_failures += 1;
+                continue;
+            }
+            auto decrypted = maybe_decrypted.value();
+
+            if (decrypted.size() != plaintext.size()) {
+                std::cout << "Decryption failed! invalid length of decrypted vector!" << std::endl;
+                num_failures += 1;
+            } else {
+                bool different = false;
+                for (unsigned i = 0; i < plaintext.size(); ++i) {
+                    if (plaintext.at(i) != decrypted.at(i)) {
+                        std::cout << "Decryption failed! decrypted vector differs from the original plaintext!" << std::endl;
+                        num_failures += 1;
+                        different = true;
+                        break;
+                    }
+                }
+                if (!different) {
+                    std::cout << "Encryption and decryption OK!" << std::endl;
+                }
             }
         }
-        if (!different) {
-            std::cout << "Encryption and decryption OK!" << std::endl;
-        }
     }
+
+    std::cout << "Failures: " << num_failures << std::endl;
+    std::cerr << "Failures: " << num_failures << std::endl;
     return 0;
 }
