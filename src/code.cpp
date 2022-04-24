@@ -126,7 +126,7 @@ auto Code::init_keys() -> void {
     pol %= mod;
 
     if (!pol.is_one()) {
-        std::cerr << "WTF?" << std::endl;
+        // std::cerr << "WTF?" << std::endl;
         goto REGEN;
     }
 
