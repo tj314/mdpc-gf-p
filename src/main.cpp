@@ -1,5 +1,7 @@
 #include <vector>
 #include <iostream>
+#include <string_view>
+#include <charconv>
 #include "code.hpp"
 
 
@@ -119,39 +121,66 @@ auto parse_args(int argc, char * argv[]) {
 }
 
 
-auto main() -> int {
-    unsigned q = 345, k = 491;
-    unsigned num_instances = 1000;
-    unsigned num_runs = 1000;
-    unsigned num_iters = 25;
+auto main(int argc, char * argv[]) -> int {
 
-    vector<long> ciphertext(k*2, 0);
+    auto params = parse_args(argc, argv);
+    if (params.error) {
+        std::cout << "Invalid arguments!" << std::endl;
+        print_help();
+        return -1;
+    } else if (params.help) {
+        print_help();
+        return 0;
+    }
+    std::cout << "Settings:" << std::endl;
+    std::cout << "q = " << params.q << std::endl;
+    std::cout << "k = " << params.k << std::endl;
+    std::cout << "iters = " << params.num_iters << std::endl;
+    std::cout << "instances = " << params.num_instances << std::endl;
+    std::cout << "runs = " << params.num_runs << std::endl;
+    std::cout << std::endl;
 
-    for (unsigned i = 0; i < num_instances; ++i) {
-        Code code{q, k};
-        for (unsigned j = 0; j < num_runs; ++j) {
-            for (unsigned it = 0; it < k; ++it) {
-                ciphertext.at(it) = floor_mod(((int)Random::integer(3)) - 1, q);
+    unsigned num_failures = 0;
+    vector<long> ciphertext(2*params.k, 0);
+
+    for (unsigned instance = 0; instance < params.num_instances; ++instance) {
+        Code c{params.q, params.k};
+        std::cerr << "Instance " << instance + 1 << " of " << params.num_instances << std::endl;
+
+        for (unsigned run = 0; run < params.num_runs; ++run) {
+            for (long & it : ciphertext) {
+                it = floor_mod(((int)Random::integer(3)) - 1, params.q);
             }
 
-            auto maybe_decrypted = code.decode(ciphertext, num_iters);
-            if (!maybe_decrypted) {
-                std::cout << "Decryption failure!" << std::endl;
+            auto maybe_decoded = c.decode(ciphertext, params.num_iters);
+            if (!maybe_decoded) {
+                std::cout << "Decryption failed!" << std::endl;
+                num_failures += 1;
+                continue;
+            }
+
+            auto decoded = maybe_decoded.value();
+            if (decoded.size() != ciphertext.size()) {
+                std::cout << "Decryption failed! invalid length of decrypted vector!" << std::endl;
+                num_failures += 1;
             } else {
-                auto err_vec = maybe_decrypted.value();
-                if (err_vec.size() != ciphertext.size()) {
-                    std::cout << "Decryption failure! err_vec is of different length" << std::endl;
-                    continue;
-                }
-                for (unsigned it = 0; it < err_vec.size(); ++it) {
-                    if (floor_mod(err_vec.at(it), q) != ciphertext.at(it)) {
-                        std::cout << "Decryption failure! err_vec differs" << std::endl;
-                        continue;
+                bool different = false;
+                for (unsigned i = 0; i < ciphertext.size(); ++i) {
+                    if (ciphertext.at(i) != floor_mod(decoded.at(i), params.q)) {
+                        std::cout << "Decryption failed! decrypted vector differs from the original plaintext!" << std::endl;
+                        num_failures += 1;
+                        different = true;
+                        break;
                     }
                 }
-                std::cout << "Decryption success!" << std::endl;
+                if (!different) {
+                    std::cout << "Encryption and decryption OK!" << std::endl;
+                }
             }
         }
     }
+
+    std::cout << "Failures: " << num_failures << std::endl;
+    std::cerr << "Failures: " << num_failures << std::endl;
     return 0;
 }
