@@ -1,23 +1,20 @@
 #include "random.hpp"
 
-Random::Random() {
-    srand(time(nullptr));
-}
-
 auto Random::get() -> Random& {
     static Random instance;
     return instance;
 }
 
 auto Random::integer_internal(unsigned bound) -> unsigned {
-    return rand() % bound;
+    return uniform_int_distribution<unsigned>{0, bound-1}(engine);
 }
 
 auto Random::error_vector_internal(unsigned k) -> vector<int> {
+    uniform_int_distribution<int> dist{-1, 1};
     vector<int> error_vector;
 
     for (unsigned i = 0; i < 2*k; ++i) {
-        error_vector.push_back(((int)this->integer_internal(3)) - 1);
+        error_vector.push_back(dist(engine));
     }
 
     return error_vector;
@@ -59,12 +56,6 @@ auto Random::poly(fmpq_polyxx& output, unsigned k, unsigned add_to_first) -> voi
     for (unsigned i = 0; i < k; ++i) {
         output.set_coeff(i, ((slong)poly.at(i)));
     }
-    /*
-    for (unsigned i = 0; i < k; ++i) {
-        std::cout << output.get_coeff(i) << " ";
-    }
-    std::cout << std::endl;
-    */
 }
 
 auto Random::poly(fmpz_mod_polyxx& output, unsigned k, unsigned q, unsigned add_to_first) -> void {
@@ -87,8 +78,4 @@ auto Random::poly(vector<unsigned>& output, unsigned k, unsigned q, unsigned add
 
 auto Random::error_vector(unsigned k) -> vector<int> {
     return get().error_vector_internal(k);
-}
-
-auto Random::reseed() -> void {
-    srand(time(NULL));
 }

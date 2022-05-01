@@ -1,5 +1,5 @@
 #include "protocol.hpp"
-
+#include <iomanip>
 auto Protocol::encrypt(const vector<unsigned>& plaintext, bool verbose) -> optional<vector<unsigned>> {
     if (plaintext.size() != k) {
         if (verbose) {
@@ -7,17 +7,14 @@ auto Protocol::encrypt(const vector<unsigned>& plaintext, bool verbose) -> optio
         }
         return {};
     }
-    vector<long> vec;
-    for (unsigned i = 0; i < k; ++i) {
-        vec.push_back((long)plaintext.at(i));
-    }
-    vector<unsigned> encoded = c.encode(vec);
+
+    vector<unsigned> encoded = c.encode(plaintext);
     vector<int> error_vector = Random::error_vector(k);
     vector<unsigned> encrypted;
     long tmp;
     for (unsigned i = 0; i < 2*k; ++i) {
-        tmp = (long)encoded.at(i) + error_vector.at(i);
-        floor_mod(tmp, q);
+        tmp = ((long)encoded.at(i)) + error_vector.at(i);
+        tmp = floor_mod(tmp, q);
         encrypted.push_back(tmp);
     }
     return encrypted;
@@ -31,11 +28,7 @@ auto Protocol::decrypt(const vector<unsigned>& ciphertext, unsigned num_iteratio
         return {};
     }
 
-    vector<long> ctext;
-    for (unsigned v: ciphertext)
-        ctext.push_back(v);
-
-    auto maybe_error_vector = c.decode(ctext, num_iterations);
+    auto maybe_error_vector = c.decode(ciphertext, num_iterations);
     if (!maybe_error_vector) {
         if (verbose) {
            cerr << "Decrypt: Decoding failure!" << endl;
@@ -47,7 +40,7 @@ auto Protocol::decrypt(const vector<unsigned>& ciphertext, unsigned num_iteratio
     long tmp;
     auto for_sure_error_vector = maybe_error_vector.value();
     for (unsigned i = 0; i < k; ++i) {
-        tmp = ciphertext.at(i) - for_sure_error_vector.at(i);
+        tmp = ((long)ciphertext.at(i)) - ((long)for_sure_error_vector.at(i));
         tmp = floor_mod(tmp, q);
         plaintext.push_back((unsigned)tmp);
     }

@@ -45,14 +45,32 @@ private:
 
     DecodeBounds bounds{};
 
-    auto calculate_syndrome(const vector<long>& ciphertext) -> vector<unsigned>;
-    auto decide(vector<long>& error_vector, const vector<unsigned>& syndrome) const -> void;
-    auto transform(vector<long>& error_vector) const -> void;
+    template<typename T>
+    auto calculate_syndrome(const vector<T>& ciphertext) -> vector<unsigned> {
+        vector<unsigned> syndrome;
+        long tmp;
+        for (unsigned i = k_value; i > 0; --i) {
+            tmp = 0;
+            for (unsigned j = 0; j < k_value; ++j) {
+                tmp += (h0.at(floor_mod(i + j, k_value)) * ((long)ciphertext.at(j)));
+            }
+            tmp = floor_mod(tmp, q_value);
+            for (unsigned j = 0; j < k_value; ++j) {
+                tmp += (h1.at(floor_mod(i + j, k_value)) * ((long)ciphertext.at(k_value + j)));
+            }
+            tmp = floor_mod(tmp, q_value);
+            syndrome.push_back((unsigned)tmp);
+        }
+        return syndrome;
+    }
+
+    auto decide(vector<int>& error_vector, const vector<unsigned>& syndrome) const -> void;
+    auto transform(vector<int>& error_vector) const -> void;
 public:
     Code(unsigned q, unsigned k);
     auto init_keys() -> void;
-    auto encode(const vector<long>& plaintext) -> vector<unsigned>;
-    auto decode(const vector<long>& ciphertext, unsigned num_iterations) -> optional<vector<long>>;
+    auto encode(const vector<unsigned>& plaintext) -> vector<unsigned>;
+    auto decode(const vector<unsigned>& ciphertext, unsigned num_iterations) -> optional<vector<int>>;
 };
 
 #endif

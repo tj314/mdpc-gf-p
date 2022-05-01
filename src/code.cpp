@@ -1,7 +1,7 @@
 #include "code.hpp"
 
 auto DecodeBounds::set(unsigned q) -> void {
-        q_thirds = round(q / 3.0);
+        q_thirds = (unsigned)round(q / 3.0);
         q_2 = q / 2.0;
         q_6 = q / 6.0;
         q_18 = q / 18.0;
@@ -34,13 +34,13 @@ Code::Code(unsigned q, unsigned k):
 
 auto Code::init_keys() -> void {
     bounds.set(q_value);
-    unsigned h0_tick = round(q_value / 3.0);
-    unsigned h1_tick = round(q_value / 9.0);
+    unsigned h0_tick = bounds.q_thirds;
+    auto h1_tick = (unsigned)round(q_value / 9.0);
 
     fmpz_modxx_ctx context{q_value};
     fmpq_polyxx h1_tmp, modulo, f;
     fmpz_polyxx numerator;
-    fmpz_mod_polyxx g{context}, h0_poly{context, k_value}, h1_poly{context, k_value}, h1_inv{context, k_value}, mod{context}, second_block_G_poly{context};
+    fmpz_mod_polyxx g{context}, h0_poly{context, k_value}, h1_poly{context, k_value}, h1_inv_poly{context, k_value}, mod{context}, second_block_G_poly{context};
     fmpzxx m, r, q{q_value};
 
     if (!h0.empty()) {
@@ -104,7 +104,7 @@ auto Code::init_keys() -> void {
         // calculate poly h(x) such that
         // h(x) = r*g(x) mod q
         // then h(x) is h^{-1}(x) in Z_q[x]/(x^k - 1)
-        h1_inv = r * g;
+        h1_inv_poly = r * g;
         break;
     }
 
@@ -122,7 +122,7 @@ auto Code::init_keys() -> void {
     }
 
     fmpz_mod_polyxx pol{context, k_value};
-    pol.set(h1_poly*h1_inv);
+    pol.set(h1_poly*h1_inv_poly);
     pol %= mod;
 
     if (!pol.is_one()) {
@@ -130,7 +130,7 @@ auto Code::init_keys() -> void {
         goto REGEN;
     }
 
-    second_block_G_poly.set(h1_inv * h0_poly);
+    second_block_G_poly.set(h1_inv_poly * h0_poly);
     fmpzxx scalar{-1};
     second_block_G_poly = scalar * second_block_G_poly;
     second_block_G_poly = second_block_G_poly % mod;
@@ -146,7 +146,7 @@ auto Code::init_keys() -> void {
     }
 }
 
-auto Code::encode(const vector<long>& plaintext) -> vector<unsigned> {
+auto Code::encode(const vector<unsigned>& plaintext) -> vector<unsigned> {
     vector<unsigned> encoded;
     long tmp = 0;
     for (unsigned i = 0; i < k_value; ++i) {
@@ -165,9 +165,9 @@ auto Code::encode(const vector<long>& plaintext) -> vector<unsigned> {
     return encoded;
 }
 
-auto Code::decode(const vector<long>& ciphertext, unsigned num_iterations) -> optional<vector<long>> {
+auto Code::decode(const vector<unsigned >& ciphertext, unsigned num_iterations) -> optional<vector<int>> {
     vector<unsigned> syndrome = calculate_syndrome(ciphertext);
-    vector<long> error_vector(2*k_value, 0);
+    vector<int> error_vector(2*k_value, 0);
 
     bool syndrome_is_zero = true;
     for (unsigned i = 0; i < k_value; ++i) {
@@ -203,25 +203,7 @@ auto Code::decode(const vector<long>& ciphertext, unsigned num_iterations) -> op
     return {};
 }
 
-auto Code::calculate_syndrome(const vector<long>& ciphertext) -> vector<unsigned> {
-    vector<unsigned> syndrome;
-    long tmp;
-    for (unsigned i = k_value; i > 0; --i) {
-        tmp = 0;
-        for (unsigned j = 0; j < k_value; ++j) {
-            tmp += (h0.at(floor_mod(i + j, k_value)) * ciphertext.at(j));
-        }
-        tmp = floor_mod(tmp, q_value);
-        for (unsigned j = 0; j < k_value; ++j) {
-            tmp += (h1.at(floor_mod(i + j, k_value)) * ciphertext.at(k_value + j));
-        }
-        tmp = floor_mod(tmp, q_value);
-        syndrome.push_back((unsigned)tmp);
-    }
-    return syndrome;
-}
-
-auto Code::decide(vector<long>& error_vector, const vector<unsigned>& syndrome) const -> void {
+auto Code::decide(vector<int>& error_vector, const vector<unsigned>& syndrome) const -> void {
     for (unsigned i = 0; i < k_value; ++i) {
         unsigned p_i = syndrome.at(i);
 
@@ -244,9 +226,9 @@ auto Code::decide(vector<long>& error_vector, const vector<unsigned>& syndrome) 
     }
 }
 
-auto Code::transform(vector<long>& error_vector) const -> void {
+auto Code::transform(vector<int>& error_vector) const -> void {
     for (unsigned i = 0; i < 2*k_value; ++i) {
-        long& val = error_vector.at(i);
+        int& val = error_vector.at(i);
         if (val == 2) {
             val = -1;
         } else if (val == -2) {
