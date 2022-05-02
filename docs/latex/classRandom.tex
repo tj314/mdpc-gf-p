@@ -1,0 +1,170 @@
+\hypertarget{classRandom}{}\doxysection{Random Class Reference}
+\label{classRandom}\index{Random@{Random}}
+
+
+\mbox{\hyperlink{classRandom}{Random}} class is a singleton used to generate random integers, vectors and polynomials.  
+
+
+
+
+{\ttfamily \#include $<$random.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classRandom_aa4e614c2379a0484774bed412c486d6d}{Random}} (const \mbox{\hyperlink{classRandom}{Random}} \&r)=delete
+\begin{DoxyCompactList}\small\item\em Class \mbox{\hyperlink{classRandom}{Random}} is a singleton, so copying is disallowed. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static auto \mbox{\hyperlink{classRandom_a6ae22d9672ea9d8b6c034f8e77171308}{integer}} (unsigned bound) -\/$>$ unsigned
+\begin{DoxyCompactList}\small\item\em Generate a random unsigned integer from the range \mbox{[}0, bound). \end{DoxyCompactList}\item 
+static auto \mbox{\hyperlink{classRandom_ab94047b841d44eaefc226cc389db599d}{poly}} (fmpq\+\_\+polyxx \&output, unsigned k, unsigned add\+\_\+to\+\_\+first=0) -\/$>$ void
+\begin{DoxyCompactList}\small\item\em Generate a random rational polynomial according to the MDPC GF(p) spec for polynomials h0 and h1. \end{DoxyCompactList}\item 
+static auto \mbox{\hyperlink{classRandom_aac500300b9ca6c4afeefa9e48ff4de4e}{poly}} (fmpz\+\_\+mod\+\_\+polyxx \&output, unsigned k, unsigned q, unsigned add\+\_\+to\+\_\+first=0) -\/$>$ void
+\begin{DoxyCompactList}\small\item\em Generate a random polynomial with coefficients from Z\+\_\+q according to the MDPC GF(p) spec for polynomials h0 and h1. \end{DoxyCompactList}\item 
+static auto \mbox{\hyperlink{classRandom_a839ad5d1bab2bfbd34f09692a3ada7a4}{poly}} (vector$<$ unsigned $>$ \&output, unsigned k, unsigned q, unsigned add\+\_\+to\+\_\+first=0) -\/$>$ void
+\begin{DoxyCompactList}\small\item\em Generate a random polynomial with coefficients from Z\+\_\+q according to the MDPC GF(p) spec for polynomials h0 and h1. \end{DoxyCompactList}\item 
+static auto \mbox{\hyperlink{classRandom_a3d743e12152ed4938a494bf278e193ef}{error\+\_\+vector}} (unsigned k) -\/$>$ vector$<$ int $>$
+\begin{DoxyCompactList}\small\item\em Generate a random error vector of length 2$\ast$k according to the MDPC GF(p) spec. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{classRandom}{Random}} class is a singleton used to generate random integers, vectors and polynomials. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classRandom_aa4e614c2379a0484774bed412c486d6d}\label{classRandom_aa4e614c2379a0484774bed412c486d6d}} 
+\index{Random@{Random}!Random@{Random}}
+\index{Random@{Random}!Random@{Random}}
+\doxysubsubsection{\texorpdfstring{Random()}{Random()}}
+{\footnotesize\ttfamily Random\+::\+Random (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classRandom}{Random}} \&}]{r }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+
+
+Class \mbox{\hyperlink{classRandom}{Random}} is a singleton, so copying is disallowed. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em r} & \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classRandom_a3d743e12152ed4938a494bf278e193ef}\label{classRandom_a3d743e12152ed4938a494bf278e193ef}} 
+\index{Random@{Random}!error\_vector@{error\_vector}}
+\index{error\_vector@{error\_vector}!Random@{Random}}
+\doxysubsubsection{\texorpdfstring{error\_vector()}{error\_vector()}}
+{\footnotesize\ttfamily static auto Random\+::error\+\_\+vector (\begin{DoxyParamCaption}\item[{unsigned}]{k }\end{DoxyParamCaption}) -\/$>$  vector$<$ int $>$\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Generate a random error vector of length 2$\ast$k according to the MDPC GF(p) spec. 
+
+\begin{DoxySeeAlso}{See also}
+Random\+::error\+\_\+vector\+\_\+internal(unsigned k) 
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}{Parameters}
+{\em k} & Parameter k from the cryptosystem settings. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Randomly generated error vector within the MDPC GF(p) spec. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classRandom_a6ae22d9672ea9d8b6c034f8e77171308}\label{classRandom_a6ae22d9672ea9d8b6c034f8e77171308}} 
+\index{Random@{Random}!integer@{integer}}
+\index{integer@{integer}!Random@{Random}}
+\doxysubsubsection{\texorpdfstring{integer()}{integer()}}
+{\footnotesize\ttfamily static auto Random\+::integer (\begin{DoxyParamCaption}\item[{unsigned}]{bound }\end{DoxyParamCaption}) -\/$>$  unsigned\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Generate a random unsigned integer from the range \mbox{[}0, bound). 
+
+\begin{DoxySeeAlso}{See also}
+Random\+::integer\+\_\+internal(unsigned bound) 
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}{Parameters}
+{\em bound} & Exclusive top bound. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Generated unsigned integer x such that 0 $<$= x $<$ bound. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classRandom_ab94047b841d44eaefc226cc389db599d}\label{classRandom_ab94047b841d44eaefc226cc389db599d}} 
+\index{Random@{Random}!poly@{poly}}
+\index{poly@{poly}!Random@{Random}}
+\doxysubsubsection{\texorpdfstring{poly()}{poly()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily static auto Random\+::poly (\begin{DoxyParamCaption}\item[{fmpq\+\_\+polyxx \&}]{output,  }\item[{unsigned}]{k,  }\item[{unsigned}]{add\+\_\+to\+\_\+first = {\ttfamily 0} }\end{DoxyParamCaption}) -\/$>$  void\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Generate a random rational polynomial according to the MDPC GF(p) spec for polynomials h0 and h1. 
+
+\begin{DoxySeeAlso}{See also}
+Random\+::poly\+\_\+internal(unsigned k, unsigned add\+\_\+to\+\_\+first = 0) 
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}{Parameters}
+{\em output} & Polynomial to store the result in. Its degree will be less than k. \\
+\hline
+{\em k} & Parameter k from the cryptosystem\textquotesingle{}s settings. \\
+\hline
+{\em add\+\_\+to\+\_\+first} & Value to add to the coefficient of x$^\wedge$0. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classRandom_aac500300b9ca6c4afeefa9e48ff4de4e}\label{classRandom_aac500300b9ca6c4afeefa9e48ff4de4e}} 
+\index{Random@{Random}!poly@{poly}}
+\index{poly@{poly}!Random@{Random}}
+\doxysubsubsection{\texorpdfstring{poly()}{poly()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily static auto Random\+::poly (\begin{DoxyParamCaption}\item[{fmpz\+\_\+mod\+\_\+polyxx \&}]{output,  }\item[{unsigned}]{k,  }\item[{unsigned}]{q,  }\item[{unsigned}]{add\+\_\+to\+\_\+first = {\ttfamily 0} }\end{DoxyParamCaption}) -\/$>$  void\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Generate a random polynomial with coefficients from Z\+\_\+q according to the MDPC GF(p) spec for polynomials h0 and h1. 
+
+\begin{DoxySeeAlso}{See also}
+Random\+::poly\+\_\+internal(unsigned k, unsigned add\+\_\+to\+\_\+first = 0) 
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}{Parameters}
+{\em output} & Polynomial to store the result in. Its degree will be less than k. \\
+\hline
+{\em k} & Parameter k from the cryptosystem\textquotesingle{}s settings. \\
+\hline
+{\em q} & Parameter q from the cryptosystem\textquotesingle{}s settings, used as modulus in Z\+\_\+q. \\
+\hline
+{\em add\+\_\+to\+\_\+first} & Value to add to the coefficient of x$^\wedge$0. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classRandom_a839ad5d1bab2bfbd34f09692a3ada7a4}\label{classRandom_a839ad5d1bab2bfbd34f09692a3ada7a4}} 
+\index{Random@{Random}!poly@{poly}}
+\index{poly@{poly}!Random@{Random}}
+\doxysubsubsection{\texorpdfstring{poly()}{poly()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily static auto Random\+::poly (\begin{DoxyParamCaption}\item[{vector$<$ unsigned $>$ \&}]{output,  }\item[{unsigned}]{k,  }\item[{unsigned}]{q,  }\item[{unsigned}]{add\+\_\+to\+\_\+first = {\ttfamily 0} }\end{DoxyParamCaption}) -\/$>$  void\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Generate a random polynomial with coefficients from Z\+\_\+q according to the MDPC GF(p) spec for polynomials h0 and h1. 
+
+\begin{DoxySeeAlso}{See also}
+Random\+::poly\+\_\+internal(unsigned k, unsigned add\+\_\+to\+\_\+first = 0) 
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}{Parameters}
+{\em output} & Vector to store the result in. Its degree will be less than k. \\
+\hline
+{\em k} & Parameter k from the cryptosystem\textquotesingle{}s settings. \\
+\hline
+{\em q} & Parameter q from the cryptosystem\textquotesingle{}s settings, used as modulus in Z\+\_\+q. \\
+\hline
+{\em add\+\_\+to\+\_\+first} & Value to add to the coefficient of x$^\wedge$0. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+random.\+hpp\end{DoxyCompactItemize}

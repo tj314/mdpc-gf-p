@@ -1,0 +1,122 @@
+\hypertarget{classProtocol}{}\doxysection{Protocol Class Reference}
+\label{classProtocol}\index{Protocol@{Protocol}}
+
+
+\mbox{\hyperlink{classProtocol}{Protocol}} class holds an instance of MDPC GF(p) cryptosystem and allows for encryption and decryption using this instance.  
+
+
+
+
+{\ttfamily \#include $<$protocol.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classProtocol_a31704b7046e529d7947657eb142d1cef}{Protocol}} (unsigned q, unsigned k)
+\begin{DoxyCompactList}\small\item\em Generate a new MDPC GF(p) instance with the given q and k settings. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classProtocol_af17ceff9d90017d56e01d12b53b35237}{encrypt}} (const vector$<$ unsigned $>$ \&plaintext, bool verbose=false) -\/$>$ optional$<$ vector$<$ unsigned $>$$>$
+\begin{DoxyCompactList}\small\item\em Encrypt a plaintext. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classProtocol_af6216872f0ab2e83dcabd5f419160a4d}{decrypt}} (const vector$<$ unsigned $>$ \&ciphertext, unsigned num\+\_\+iterations=25, bool verbose=false) -\/$>$ optional$<$ vector$<$ unsigned $>$$>$
+\begin{DoxyCompactList}\small\item\em Decrypt a ciphertext. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{classProtocol}{Protocol}} class holds an instance of MDPC GF(p) cryptosystem and allows for encryption and decryption using this instance. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classProtocol_a31704b7046e529d7947657eb142d1cef}\label{classProtocol_a31704b7046e529d7947657eb142d1cef}} 
+\index{Protocol@{Protocol}!Protocol@{Protocol}}
+\index{Protocol@{Protocol}!Protocol@{Protocol}}
+\doxysubsubsection{\texorpdfstring{Protocol()}{Protocol()}}
+{\footnotesize\ttfamily Protocol\+::\+Protocol (\begin{DoxyParamCaption}\item[{unsigned}]{q,  }\item[{unsigned}]{k }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Generate a new MDPC GF(p) instance with the given q and k settings. 
+
+To achieve the best possible DFR value, q should be a power of 2 and k should be a prime. It is not required, however.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{classCode}{Code}}
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}{Parameters}
+{\em q} & Parameter q, ideally a power of 2. \\
+\hline
+{\em k} & Parameter k, ideally a prime. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classProtocol_af6216872f0ab2e83dcabd5f419160a4d}\label{classProtocol_af6216872f0ab2e83dcabd5f419160a4d}} 
+\index{Protocol@{Protocol}!decrypt@{decrypt}}
+\index{decrypt@{decrypt}!Protocol@{Protocol}}
+\doxysubsubsection{\texorpdfstring{decrypt()}{decrypt()}}
+{\footnotesize\ttfamily auto Protocol\+::decrypt (\begin{DoxyParamCaption}\item[{const vector$<$ unsigned $>$ \&}]{ciphertext,  }\item[{unsigned}]{num\+\_\+iterations = {\ttfamily 25},  }\item[{bool}]{verbose = {\ttfamily false} }\end{DoxyParamCaption}) -\/$>$  optional$<$ vector$<$ unsigned $>$$>$}
+
+
+
+Decrypt a ciphertext. 
+
+Decryption is achieved as follows\+:
+\begin{DoxyEnumerate}
+\item Ciphertext is decoded using the generated \mbox{\hyperlink{classCode}{Code}} instance to obtain the error vector used in encryption.
+\item The error vector is subtracted from the ciphertext.
+\item Plaintext is read as the first k positions from ciphertext. Decryption will fail if\+:
+\end{DoxyEnumerate}
+\begin{DoxyItemize}
+\item Ciphertext is not of length 2$\ast$k.
+\item Decoding fails.
+\end{DoxyItemize}
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{classCode_a48dcaf1a4bdf68ec6ed556162ccdc50a}{Code\+::decode(const vector$<$unsigned$>$\& ciphertext, unsigned num\+\_\+iterations)}} 
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}{Parameters}
+{\em ciphertext} & A vector of length 2$\ast$k with values from Z\+\_\+q. \\
+\hline
+{\em num\+\_\+iterations} & Number of iterations used in the decoding step. \\
+\hline
+{\em verbose} & Whether to print error messages. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+On success, return plaintext. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classProtocol_af17ceff9d90017d56e01d12b53b35237}\label{classProtocol_af17ceff9d90017d56e01d12b53b35237}} 
+\index{Protocol@{Protocol}!encrypt@{encrypt}}
+\index{encrypt@{encrypt}!Protocol@{Protocol}}
+\doxysubsubsection{\texorpdfstring{encrypt()}{encrypt()}}
+{\footnotesize\ttfamily auto Protocol\+::encrypt (\begin{DoxyParamCaption}\item[{const vector$<$ unsigned $>$ \&}]{plaintext,  }\item[{bool}]{verbose = {\ttfamily false} }\end{DoxyParamCaption}) -\/$>$  optional$<$ vector$<$ unsigned $>$$>$}
+
+
+
+Encrypt a plaintext. 
+
+Encryption is achieved as follows\+:
+\begin{DoxyEnumerate}
+\item Plaintext is encoded using the generated \mbox{\hyperlink{classCode}{Code}} instance.
+\item An error vector is generated.
+\item Encoded plaintext is summed with the error vector. Encryption will fail if and only if the plaintext length is not k. Ciphertext is of length 2$\ast$k.
+\end{DoxyEnumerate}
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{classCode_a2ac84bd2a4ba29af23a838386c0f9edd}{Code\+::encode(const vector$<$unsigned$>$\& plaintext)}} 
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}{Parameters}
+{\em plaintext} & A vector of length k with values from Z\+\_\+q. \\
+\hline
+{\em verbose} & Whether to print error messages. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+On success, return ciphertext. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+protocol.\+hpp\end{DoxyCompactItemize}

@@ -1,0 +1,128 @@
+\hypertarget{classCode}{}\doxysection{Code Class Reference}
+\label{classCode}\index{Code@{Code}}
+
+
+\mbox{\hyperlink{classCode}{Code}} class is an instance of MDPC GF(p), holds matrices H and G and performs encoding and decoding.  
+
+
+
+
+{\ttfamily \#include $<$code.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classCode_ab060cc77a2e7dbd74df84e7774c51db1}{Code}} (unsigned q, unsigned k)
+\begin{DoxyCompactList}\small\item\em Create a new instance of MDPC GF(p) and generate keys. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classCode_a7319dea60fc127aba6408847f4efbf19}{init\+\_\+keys}} () -\/$>$ void
+\begin{DoxyCompactList}\small\item\em Generate keys. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classCode_a2ac84bd2a4ba29af23a838386c0f9edd}{encode}} (const vector$<$ unsigned $>$ \&vec) -\/$>$ vector$<$ unsigned $>$
+\begin{DoxyCompactList}\small\item\em Encode a vector. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classCode_a48dcaf1a4bdf68ec6ed556162ccdc50a}{decode}} (const vector$<$ unsigned $>$ \&vec, unsigned num\+\_\+iterations) -\/$>$ optional$<$ vector$<$ int $>$$>$
+\begin{DoxyCompactList}\small\item\em Decode a vector. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{classCode}{Code}} class is an instance of MDPC GF(p), holds matrices H and G and performs encoding and decoding. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classCode_ab060cc77a2e7dbd74df84e7774c51db1}\label{classCode_ab060cc77a2e7dbd74df84e7774c51db1}} 
+\index{Code@{Code}!Code@{Code}}
+\index{Code@{Code}!Code@{Code}}
+\doxysubsubsection{\texorpdfstring{Code()}{Code()}}
+{\footnotesize\ttfamily Code\+::\+Code (\begin{DoxyParamCaption}\item[{unsigned}]{q,  }\item[{unsigned}]{k }\end{DoxyParamCaption})}
+
+
+
+Create a new instance of MDPC GF(p) and generate keys. 
+
+If the parameter q is not a power of 2, one may expect suboptimal performance of the decoder. In such scenario the decoding will fail with higher frequency. This may be used to test the decoder\textquotesingle{}s performance, however. Hence such setting of the q is not disallowed.
+
+
+\begin{DoxyParams}{Parameters}
+{\em q} & Parameter q, ideally a power of 2. \\
+\hline
+{\em k} & Parameter k, ideally a prime. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classCode_a48dcaf1a4bdf68ec6ed556162ccdc50a}\label{classCode_a48dcaf1a4bdf68ec6ed556162ccdc50a}} 
+\index{Code@{Code}!decode@{decode}}
+\index{decode@{decode}!Code@{Code}}
+\doxysubsubsection{\texorpdfstring{decode()}{decode()}}
+{\footnotesize\ttfamily auto Code\+::decode (\begin{DoxyParamCaption}\item[{const vector$<$ unsigned $>$ \&}]{vec,  }\item[{unsigned}]{num\+\_\+iterations }\end{DoxyParamCaption}) -\/$>$  optional$<$ vector$<$ int $>$$>$}
+
+
+
+Decode a vector. 
+
+Decoding the vector means finding the used error vector. In the beginning, current error vector value is set to 0 and the vec\textquotesingle{}s syndrome is calculated. If it is zero, decoding successfully ends and zero initialized error vector is returned. Otherwise, the vector is decoded iteratively up to num\+\_\+iterations iterations. In each\+:
+\begin{DoxyEnumerate}
+\item The current error vector is updated using the decide method and transformed using the transform method.
+\item The syndrome of the current error vector is calculated.
+\item This syndrome is subtracted from vec\textquotesingle{}s syndrome. If the result is a zero vector, the decoding successfully ends and the current error vector is returned. In case all iterations finnish and the error vector is not returned, the decoding is considered a failure.
+\end{DoxyEnumerate}
+
+
+\begin{DoxyParams}{Parameters}
+{\em vec} & A vector in Z\+\_\+q of length 2$\ast$k. \\
+\hline
+{\em num\+\_\+iterations} & Number of iterations. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+On success, return found error vector. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classCode_a2ac84bd2a4ba29af23a838386c0f9edd}\label{classCode_a2ac84bd2a4ba29af23a838386c0f9edd}} 
+\index{Code@{Code}!encode@{encode}}
+\index{encode@{encode}!Code@{Code}}
+\doxysubsubsection{\texorpdfstring{encode()}{encode()}}
+{\footnotesize\ttfamily auto Code\+::encode (\begin{DoxyParamCaption}\item[{const vector$<$ unsigned $>$ \&}]{vec }\end{DoxyParamCaption}) -\/$>$  vector$<$ unsigned $>$}
+
+
+
+Encode a vector. 
+
+The vector vec is encoded as vec$\ast$G. The resulting vector is of length 2$\ast$k and its first k positions are equal to vec. This is because the first block of G is identity matrix.
+
+
+\begin{DoxyParams}{Parameters}
+{\em vec} & A vector in Z\+\_\+q of length k. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+An encoded vectpr in Z\+\_\+q of length 2$\ast$k. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classCode_a7319dea60fc127aba6408847f4efbf19}\label{classCode_a7319dea60fc127aba6408847f4efbf19}} 
+\index{Code@{Code}!init\_keys@{init\_keys}}
+\index{init\_keys@{init\_keys}!Code@{Code}}
+\doxysubsubsection{\texorpdfstring{init\_keys()}{init\_keys()}}
+{\footnotesize\ttfamily auto Code\+::init\+\_\+keys (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) -\/$>$  void}
+
+
+
+Generate keys. 
+
+The private key is the matrix H. The public kes is the matrix G. Matrix H consists of circulant blocks H0 and H1. These are represented by polynomials h0 and h1 respectively. Matrix G consists of one identity matrix block and a one circulant block. The keys are generated as follows\+:
+\begin{DoxyEnumerate}
+\item Randomly generate h0.
+\item Randomly generate h1 such that it is invertible\+:
+\begin{DoxyEnumerate}
+\item Randomly generate h1 in Z\+\_\+q/(x$^\wedge$k -\/1).
+\item Convert it to Q.
+\item Calculate the inverse in Q.
+\item Convert the inverse to Z\+\_\+q/(x$^\wedge$k -\/1).
+\end{DoxyEnumerate}
+\item Calculate second block of matrix G as -\/(h1\+\_\+inv$\ast$h0).
+\end{DoxyEnumerate}
+
+\begin{DoxySeeAlso}{See also}
+Random\+::poly\+\_\+internal(unsigned k, unsigned add\+\_\+to\+\_\+first = 0) 
+\end{DoxySeeAlso}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+code.\+hpp\end{DoxyCompactItemize}

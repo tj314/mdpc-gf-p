@@ -1,5 +1,5 @@
 #include "protocol.hpp"
-#include <iomanip>
+
 auto Protocol::encrypt(const vector<unsigned>& plaintext, bool verbose) -> optional<vector<unsigned>> {
     if (plaintext.size() != k) {
         if (verbose) {
