@@ -95,9 +95,6 @@ private:
             tmp = 0;
             for (unsigned j = 0; j < k_value; ++j) {
                 tmp += (h0.at(floor_mod(i + j, k_value)) * ((long)vec.at(j)));
-            }
-            tmp = floor_mod(tmp, q_value);
-            for (unsigned j = 0; j < k_value; ++j) {
                 tmp += (h1.at(floor_mod(i + j, k_value)) * ((long)vec.at(k_value + j)));
             }
             tmp = floor_mod(tmp, q_value);
