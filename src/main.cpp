@@ -1,187 +1,61 @@
 #include <vector>
 #include <iostream>
-#include <string_view>
-#include <charconv>
+#include <chrono>
 #include "protocol.hpp"
 
+using std::chrono::high_resolution_clock;
+using std::chrono::duration_cast;
+using std::chrono::milliseconds;
+using std::chrono::time_point;
+using std::cout;
+using std::cerr;
+using std::endl;
 
-auto print_help() -> void {
-    std::cout << "====================================================================================================================" << std::endl;
-    std::cout << "Usage:" << std::endl;
-    std::cout << "Run tests:    ./mdpc-gf-p -q q_value -k k_value -i/--iters num_iters -n/--instances num_instances -r/--runs num_runs" << std::endl;
-    std::cout << "Warning! A lot of output will be produced. It is highly recommended to redirect it." << std::endl;
-    std::cout << "Example usage:" << std::endl;
-    std::cout << "./mdpc-gf-p -q 512 -k 491 -i 25 -n 1000 -r 1000 > out.txt" << std::endl;
-    std::cout << "====================================================================================================================" << std::endl;
-}
+auto main() -> int {
+    unsigned q = 345, k = 491;
+    unsigned instances = 1000;
 
+    cout << "Settings:" << endl;
+    cout << "q = " << q << endl;
+    cout << "k = " << k << endl;
+    cout << "instances = " << instances << endl;
+    cout << "units = milliseconds" << endl;
 
-auto parse_args(int argc, char * argv[]) {
-    struct params {
-        unsigned q;
-        unsigned k;
-        unsigned num_iters;
-        unsigned num_instances;
-        unsigned num_runs;
-        bool error;
-        bool help;
-    } p {0, 0, 0, 0, 0, false, false};
+    vector<unsigned> plaintext(k, 0);
+    for (unsigned instance = 0; instance < instances; ++instance) {
+        std::cerr << "Instance " << instance + 1 << " of " << instances << std::endl;
+        auto start_gen = high_resolution_clock::now();
+        Protocol p{q, k};
+        auto stop_gen = high_resolution_clock::now();
 
-    if (argc == 1) {
-        p.error = true;
-        return p;
-    }
-
-    bool q_set = false, k_set = false, iters_set = false, instances_set = false, runs_set = false;
-
-    std::vector<std::string_view> args(argv + 1, argv + argc);
-    auto it = args.begin(), end = args.end();
-    while(it != end) {
-        if (*it == "-h" || *it == "--help") {
-            p.help = true;
-            return p;
-        } else if (*it == "-q") {
-            ++it;
-            if (it != end) {
-                auto res = std::from_chars((*it).data(), (*it).data() + (*it).size(), p.q);
-                if (res.ec == std::errc::invalid_argument) {
-                    p.error = true;
-                    return p;
-                }
-                q_set = true;
-            } else {
-                p.error = true;
-                return p;
-            }
-        } else if (*it == "-k") {
-            ++it;
-            if (it != end) {
-                auto res = std::from_chars((*it).data(), (*it).data() + (*it).size(), p.k);
-                if (res.ec == std::errc::invalid_argument) {
-                    p.error = true;
-                    return p;
-                }
-                k_set = true;
-            } else {
-                p.error = true;
-                return p;
-            }
-        } else if (*it == "-i" || *it == "--iters") {
-            ++it;
-            if (it != end) {
-                auto res = std::from_chars((*it).data(), (*it).data() + (*it).size(), p.num_iters);
-                if (res.ec == std::errc::invalid_argument) {
-                    p.error = true;
-                    return p;
-                }
-                iters_set = true;
-            } else {
-                p.error = true;
-                return p;
-            }
-        } else if (*it == "-n" || *it == "--instances") {
-            ++it;
-            if (it != end) {
-                auto res = std::from_chars((*it).data(), (*it).data() + (*it).size(), p.num_instances);
-                if (res.ec == std::errc::invalid_argument) {
-                    p.error = true;
-                    return p;
-                }
-                instances_set = true;
-            } else {
-                p.error = true;
-                return p;
-            }
-        } else if (*it == "-r" || *it == "--runs") {
-            ++it;
-            if (it != end) {
-                auto res = std::from_chars((*it).data(), (*it).data() + (*it).size(), p.num_runs);
-                if (res.ec == std::errc::invalid_argument) {
-                    p.error = true;
-                    return p;
-                }
-                runs_set = true;
-            } else {
-                p.error = true;
-                return p;
-            }
-        } else {
-            // unknown param
-            p.error = true;
-            return p;
+        for (unsigned i = 0; i < k; ++i) {
+            plaintext.at(i) = Random::integer(q);
         }
-        ++it;
+
+        auto start_enc = high_resolution_clock::now();
+        auto ciphertext = p.encrypt(plaintext, false).value();
+        auto stop_enc = high_resolution_clock::now();
+
+        auto start_dec_25 = high_resolution_clock::now();
+        auto maybe_decrypted_25 = p.decrypt(ciphertext, 25, false);
+        auto stop_dec_25 = high_resolution_clock::now();
+
+        auto start_dec_50 = high_resolution_clock::now();
+        auto maybe_decrypted_50 = p.decrypt(ciphertext, 50, false);
+        auto stop_dec_50 = high_resolution_clock::now();
+
+        auto start_dec_75 = high_resolution_clock::now();
+        auto maybe_decrypted_75 = p.decrypt(ciphertext, 75, false);
+        auto stop_dec_75 = high_resolution_clock::now();
+
+
+        auto duration_gen = duration_cast<milliseconds>(stop_gen - start_gen);
+        auto duration_enc = duration_cast<milliseconds>(stop_enc - start_enc);
+        auto duration_dec_25 = duration_cast<milliseconds>(stop_dec_25 - start_dec_25);
+        auto duration_dec_50 = duration_cast<milliseconds>(stop_dec_50 - start_dec_50);
+        auto duration_dec_75 = duration_cast<milliseconds>(stop_dec_75 - start_dec_75);
+        cout << duration_gen.count() << " " << duration_enc.count() << " " << duration_dec_25.count() << " " << duration_dec_50.count() << " " << duration_dec_75.count() << endl;
     }
 
-    if (!(q_set && k_set && runs_set && instances_set && iters_set)) {
-        p.error = true;
-    }
-
-    return p;
-}
-
-
-auto main(int argc, char * argv[]) -> int {
-
-    auto params = parse_args(argc, argv);
-    if (params.error) {
-        std::cout << "Invalid arguments!" << std::endl;
-        print_help();
-        return -1;
-    } else if (params.help) {
-        print_help();
-        return 0;
-    }
-    std::cout << "Settings:" << std::endl;
-    std::cout << "q = " << params.q << std::endl;
-    std::cout << "k = " << params.k << std::endl;
-    std::cout << "iters = " << params.num_iters << std::endl;
-    std::cout << "instances = " << params.num_instances << std::endl;
-    std::cout << "runs = " << params.num_runs << std::endl;
-    std::cout << std::endl;
-
-    unsigned num_failures = 0;
-    vector<unsigned> plaintext(params.k, 0);
-    for (unsigned instance = 0; instance < params.num_instances; ++instance) {
-        Protocol p{params.q, params.k};
-        std::cerr << "Instance " << instance + 1 << " of " << params.num_instances << std::endl;
-
-        for (unsigned run = 0; run < params.num_runs; ++run) {
-            for (unsigned i = 0; i < params.k; ++i) {
-                plaintext.at(i) = Random::integer(params.q);
-            }
-
-            auto ciphertext = p.encrypt(plaintext, false).value();
-
-            auto maybe_decrypted = p.decrypt(ciphertext, params.num_iters, false);
-            if (!maybe_decrypted) {
-                std::cout << "Decryption failed!" << std::endl;
-                num_failures += 1;
-                continue;
-            }
-            auto decrypted = maybe_decrypted.value();
-
-            if (decrypted.size() != plaintext.size()) {
-                std::cout << "Decryption failed! invalid length of decrypted vector!" << std::endl;
-                num_failures += 1;
-            } else {
-                bool different = false;
-                for (unsigned i = 0; i < plaintext.size(); ++i) {
-                    if (plaintext.at(i) != decrypted.at(i)) {
-                        std::cout << "Decryption failed! decrypted vector differs from the original plaintext!" << std::endl;
-                        num_failures += 1;
-                        different = true;
-                        break;
-                    }
-                }
-                if (!different) {
-                    std::cout << "Encryption and decryption OK!" << std::endl;
-                }
-            }
-        }
-    }
-
-    std::cout << "Failures: " << num_failures << std::endl;
-    std::cerr << "Failures: " << num_failures << std::endl;
     return 0;
 }
