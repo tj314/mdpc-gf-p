@@ -4,10 +4,13 @@ This repository contains an implementation of the p-ary QC-MDPC McEliece cryptos
 This implementation is currently WIP.
 
 ## How to compile
-You can compile this project using the provided Makefile. 
-You need the g++ compiler. The code is compiled with the c++17 standard and makes heavy use of c++17 features. From the project's root directory simply call:
+You can compile this project using the provided CMakeLists.txt. 
+You need the g++ compiler and `cmake`. The code is compiled with the c++17 standard and makes heavy use of c++17 features. From the project's root directory run:
 ```shell
-$ make
+$ mkdir -p build
+$ cd build
+$ cmake ..
+$ cmake --build .
 ```
 
 The resulting binary will be located in the `build` directory.
@@ -17,7 +20,7 @@ Note, that this implementation depends on [FLINT](https://flintlib.org/). You ca
 $ sudo dnf install flint flint-devel flint-static
 ```
 
-The provided Makefile assumes FLINT's header files are available in the `/usr/include/flint` directory. Should you distribution place them elsewhere, you must modify the Makefile. You can find the location of these files running these commands:
+The provided CMakeLists.txt assumes FLINT's header files are available in the `/usr/include/flint` directory. Should you distribution place them elsewhere, you must modify the Makefile. You can find the location of these files running these commands:
 ```shell
 $ sudo updatedb
 $ locate flint
