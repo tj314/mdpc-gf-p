@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.1" xml:lang="en-US">
+  <compound refid="classCode" kind="class"><name>Code</name>
+    <member refid="classCode_1a0dbdd9898e48950900abbb534c54b6b3" kind="variable"><name>q_value</name></member>
+    <member refid="classCode_1af8bf054b3a051c3a79555ccd1cf40517" kind="variable"><name>k_value</name></member>
+    <member refid="classCode_1a2ff1cbe49ec36c13defc4bff2a61b81a" kind="variable"><name>h0</name></member>
+    <member refid="classCode_1ae7d98d223efccdea727deeb2db3c6d57" kind="variable"><name>h1</name></member>
+    <member refid="classCode_1a4a0f2a775f03f7722f32aa5d28a44c33" kind="variable"><name>second_block_G</name></member>
+    <member refid="classCode_1af00406b7655ec5898f4373ac4c46eaeb" kind="variable"><name>bounds</name></member>
+    <member refid="classCode_1a55b3cc17325d7d94b1e056212200ec28" kind="function"><name>calculate_syndrome</name></member>
+    <member refid="classCode_1a312a05c7c16297b52c91953b3a6522ae" kind="function"><name>decide</name></member>
+    <member refid="classCode_1ad74f33b7a60fac984b6b7ccedb4eeee2" kind="function"><name>transform</name></member>
+    <member refid="classCode_1ab060cc77a2e7dbd74df84e7774c51db1" kind="function"><name>Code</name></member>
+    <member refid="classCode_1a7319dea60fc127aba6408847f4efbf19" kind="function"><name>init_keys</name></member>
+    <member refid="classCode_1a2ac84bd2a4ba29af23a838386c0f9edd" kind="function"><name>encode</name></member>
+    <member refid="classCode_1a48dcaf1a4bdf68ec6ed556162ccdc50a" kind="function"><name>decode</name></member>
+  </compound>
+  <compound refid="structDecodeBounds" kind="struct"><name>DecodeBounds</name>
+    <member refid="structDecodeBounds_1a6339b88c1dcc398fa9e509130220f88b" kind="variable"><name>q_thirds</name></member>
+    <member refid="structDecodeBounds_1aee77db89774749a29f4941eafc84ac0f" kind="variable"><name>q_2</name></member>
+    <member refid="structDecodeBounds_1a3a57c2e80eec1799752d19843d1a6e4c" kind="variable"><name>q_6</name></member>
+    <member refid="structDecodeBounds_1aab6633faf8e8ac9403cb35fbbb08c1c5" kind="variable"><name>q_18</name></member>
+    <member refid="structDecodeBounds_1a122a65262ff1b15be89a34c951fadc0d" kind="variable"><name>b1</name></member>
+    <member refid="structDecodeBounds_1a50f94bd66d8756d25d79205db798fa1d" kind="variable"><name>b2</name></member>
+    <member refid="structDecodeBounds_1aa0189bb033223cffac835800ccf51311" kind="variable"><name>b3</name></member>
+    <member refid="structDecodeBounds_1a99e8c0c9e461359ecabcd8151113e838" kind="variable"><name>b4</name></member>
+    <member refid="structDecodeBounds_1a9c2372787104c269c4b91e315607be9d" kind="variable"><name>b5</name></member>
+    <member refid="structDecodeBounds_1abf40150cff4a2e633a522ac2dddbc50f" kind="variable"><name>b6</name></member>
+    <member refid="structDecodeBounds_1af44007aba84abf58e9637b7d85ff2f40" kind="variable"><name>b7</name></member>
+    <member refid="structDecodeBounds_1a43b4e430eed89bd8d023699efc262712" kind="variable"><name>b8</name></member>
+    <member refid="structDecodeBounds_1ad49c95f5df74c177f02cc83ab741ee29" kind="function"><name>DecodeBounds</name></member>
+    <member refid="structDecodeBounds_1aa8149cc21797147a031f238ffcd615fb" kind="function"><name>set</name></member>
+  </compound>
+  <compound refid="classProtocol" kind="class"><name>Protocol</name>
+    <member refid="classProtocol_1a5821a36ee0006093f6cf4ae3bb4da415" kind="variable"><name>q</name></member>
+    <member refid="classProtocol_1a0d25c8fe68856ead288b814591265720" kind="variable"><name>k</name></member>
+    <member refid="classProtocol_1aa7122b7da5b3cb609a9b522c15c8ad1f" kind="variable"><name>c</name></member>
+    <member refid="classProtocol_1a31704b7046e529d7947657eb142d1cef" kind="function"><name>Protocol</name></member>
+    <member refid="classProtocol_1af17ceff9d90017d56e01d12b53b35237" kind="function"><name>encrypt</name></member>
+    <member refid="classProtocol_1af6216872f0ab2e83dcabd5f419160a4d" kind="function"><name>decrypt</name></member>
+  </compound>
+  <compound refid="classRandom" kind="class"><name>Random</name>
+    <member refid="classRandom_1ad95762b30e07f93b773696ebf2ae903e" kind="variable"><name>engine</name></member>
+    <member refid="classRandom_1a5ae995183b170467dbd410009b54287d" kind="function"><name>Random</name></member>
+    <member refid="classRandom_1a5c758f46b08d22c73386b70f46a625f4" kind="function"><name>integer_internal</name></member>
+    <member refid="classRandom_1af6770c2aa6893e7ad8481cc2a7be84d0" kind="function"><name>poly_internal</name></member>
+    <member refid="classRandom_1acb3e88fed19c001d7f8dcd8cb37c95b9" kind="function"><name>error_vector_internal</name></member>
+    <member refid="classRandom_1a045a985f21252fd15b818c39078a665a" kind="function"><name>get</name></member>
+    <member refid="classRandom_1aa4e614c2379a0484774bed412c486d6d" kind="function"><name>Random</name></member>
+    <member refid="classRandom_1a6ae22d9672ea9d8b6c034f8e77171308" kind="function"><name>integer</name></member>
+    <member refid="classRandom_1ab94047b841d44eaefc226cc389db599d" kind="function"><name>poly</name></member>
+    <member refid="classRandom_1aac500300b9ca6c4afeefa9e48ff4de4e" kind="function"><name>poly</name></member>
+    <member refid="classRandom_1a839ad5d1bab2bfbd34f09692a3ada7a4" kind="function"><name>poly</name></member>
+    <member refid="classRandom_1a3d743e12152ed4938a494bf278e193ef" kind="function"><name>error_vector</name></member>
+  </compound>
+  <compound refid="code_8hpp" kind="file"><name>code.hpp</name>
+  </compound>
+  <compound refid="protocol_8hpp" kind="file"><name>protocol.hpp</name>
+  </compound>
+  <compound refid="random_8hpp" kind="file"><name>random.hpp</name>
+  </compound>
+  <compound refid="utils_8hpp" kind="file"><name>utils.hpp</name>
+    <member refid="utils_8hpp_1aad1eb0be6c6786670546fac886864de8" kind="function"><name>floor_mod</name></member>
+  </compound>
+  <compound refid="dir_d44c64559bbebec7f509842c48db8b23" kind="dir"><name>include</name>
+  </compound>
+</doxygenindex>

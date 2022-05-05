@@ -1,0 +1,231 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="structDecodeBounds" kind="struct" language="C++" prot="public">
+    <compoundname>DecodeBounds</compoundname>
+    <includes refid="code_8hpp" local="no">code.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structDecodeBounds_1a6339b88c1dcc398fa9e509130220f88b" prot="public" static="no" mutable="no">
+        <type>unsigned</type>
+        <definition>unsigned DecodeBounds::q_thirds</definition>
+        <argsstring></argsstring>
+        <name>q_thirds</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" line="32" column="14" bodyfile="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structDecodeBounds_1aee77db89774749a29f4941eafc84ac0f" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double DecodeBounds::q_2</definition>
+        <argsstring></argsstring>
+        <name>q_2</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" line="33" column="12" bodyfile="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structDecodeBounds_1a3a57c2e80eec1799752d19843d1a6e4c" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double DecodeBounds::q_6</definition>
+        <argsstring></argsstring>
+        <name>q_6</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" line="33" column="16" bodyfile="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structDecodeBounds_1aab6633faf8e8ac9403cb35fbbb08c1c5" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double DecodeBounds::q_18</definition>
+        <argsstring></argsstring>
+        <name>q_18</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" line="33" column="20" bodyfile="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structDecodeBounds_1a122a65262ff1b15be89a34c951fadc0d" prot="public" static="no" mutable="no">
+        <type>unsigned</type>
+        <definition>unsigned DecodeBounds::b1</definition>
+        <argsstring></argsstring>
+        <name>b1</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" line="34" column="14" bodyfile="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structDecodeBounds_1a50f94bd66d8756d25d79205db798fa1d" prot="public" static="no" mutable="no">
+        <type>unsigned</type>
+        <definition>unsigned DecodeBounds::b2</definition>
+        <argsstring></argsstring>
+        <name>b2</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" line="34" column="17" bodyfile="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structDecodeBounds_1aa0189bb033223cffac835800ccf51311" prot="public" static="no" mutable="no">
+        <type>unsigned</type>
+        <definition>unsigned DecodeBounds::b3</definition>
+        <argsstring></argsstring>
+        <name>b3</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" line="34" column="20" bodyfile="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structDecodeBounds_1a99e8c0c9e461359ecabcd8151113e838" prot="public" static="no" mutable="no">
+        <type>unsigned</type>
+        <definition>unsigned DecodeBounds::b4</definition>
+        <argsstring></argsstring>
+        <name>b4</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" line="34" column="23" bodyfile="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structDecodeBounds_1a9c2372787104c269c4b91e315607be9d" prot="public" static="no" mutable="no">
+        <type>unsigned</type>
+        <definition>unsigned DecodeBounds::b5</definition>
+        <argsstring></argsstring>
+        <name>b5</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" line="34" column="26" bodyfile="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structDecodeBounds_1abf40150cff4a2e633a522ac2dddbc50f" prot="public" static="no" mutable="no">
+        <type>unsigned</type>
+        <definition>unsigned DecodeBounds::b6</definition>
+        <argsstring></argsstring>
+        <name>b6</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" line="34" column="29" bodyfile="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structDecodeBounds_1af44007aba84abf58e9637b7d85ff2f40" prot="public" static="no" mutable="no">
+        <type>unsigned</type>
+        <definition>unsigned DecodeBounds::b7</definition>
+        <argsstring></argsstring>
+        <name>b7</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" line="34" column="32" bodyfile="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structDecodeBounds_1a43b4e430eed89bd8d023699efc262712" prot="public" static="no" mutable="no">
+        <type>unsigned</type>
+        <definition>unsigned DecodeBounds::b8</definition>
+        <argsstring></argsstring>
+        <name>b8</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" line="34" column="35" bodyfile="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structDecodeBounds_1ad49c95f5df74c177f02cc83ab741ee29" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>DecodeBounds::DecodeBounds</definition>
+        <argsstring>()=default</argsstring>
+        <name>DecodeBounds</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" line="36" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="structDecodeBounds_1aa8149cc21797147a031f238ffcd615fb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto DecodeBounds::set</definition>
+        <argsstring>(unsigned q) -&gt; void</argsstring>
+        <name>set</name>
+        <param>
+          <type>unsigned</type>
+          <declname>q</declname>
+        </param>
+        <briefdescription>
+<para>Calculate the values. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>q</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Parameter q of the MDPC GF(p) instance. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" line="42" column="10"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para><ref refid="structDecodeBounds" kindref="compound">DecodeBounds</ref> struct holds values used in decoding. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>These values are needed in each iteration of decoding. They can be calculated from the parameter q and do not change until this parameter changes. The values are calculated using the <ref refid="structDecodeBounds_1aa8149cc21797147a031f238ffcd615fb" kindref="member">set()</ref> method. The values are uninitialized until it is called. </para>
+    </detaileddescription>
+    <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" line="31" column="1" bodyfile="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" bodystart="31" bodyend="43"/>
+    <listofallmembers>
+      <member refid="structDecodeBounds_1a122a65262ff1b15be89a34c951fadc0d" prot="public" virt="non-virtual"><scope>DecodeBounds</scope><name>b1</name></member>
+      <member refid="structDecodeBounds_1a50f94bd66d8756d25d79205db798fa1d" prot="public" virt="non-virtual"><scope>DecodeBounds</scope><name>b2</name></member>
+      <member refid="structDecodeBounds_1aa0189bb033223cffac835800ccf51311" prot="public" virt="non-virtual"><scope>DecodeBounds</scope><name>b3</name></member>
+      <member refid="structDecodeBounds_1a99e8c0c9e461359ecabcd8151113e838" prot="public" virt="non-virtual"><scope>DecodeBounds</scope><name>b4</name></member>
+      <member refid="structDecodeBounds_1a9c2372787104c269c4b91e315607be9d" prot="public" virt="non-virtual"><scope>DecodeBounds</scope><name>b5</name></member>
+      <member refid="structDecodeBounds_1abf40150cff4a2e633a522ac2dddbc50f" prot="public" virt="non-virtual"><scope>DecodeBounds</scope><name>b6</name></member>
+      <member refid="structDecodeBounds_1af44007aba84abf58e9637b7d85ff2f40" prot="public" virt="non-virtual"><scope>DecodeBounds</scope><name>b7</name></member>
+      <member refid="structDecodeBounds_1a43b4e430eed89bd8d023699efc262712" prot="public" virt="non-virtual"><scope>DecodeBounds</scope><name>b8</name></member>
+      <member refid="structDecodeBounds_1ad49c95f5df74c177f02cc83ab741ee29" prot="public" virt="non-virtual"><scope>DecodeBounds</scope><name>DecodeBounds</name></member>
+      <member refid="structDecodeBounds_1aab6633faf8e8ac9403cb35fbbb08c1c5" prot="public" virt="non-virtual"><scope>DecodeBounds</scope><name>q_18</name></member>
+      <member refid="structDecodeBounds_1aee77db89774749a29f4941eafc84ac0f" prot="public" virt="non-virtual"><scope>DecodeBounds</scope><name>q_2</name></member>
+      <member refid="structDecodeBounds_1a3a57c2e80eec1799752d19843d1a6e4c" prot="public" virt="non-virtual"><scope>DecodeBounds</scope><name>q_6</name></member>
+      <member refid="structDecodeBounds_1a6339b88c1dcc398fa9e509130220f88b" prot="public" virt="non-virtual"><scope>DecodeBounds</scope><name>q_thirds</name></member>
+      <member refid="structDecodeBounds_1aa8149cc21797147a031f238ffcd615fb" prot="public" virt="non-virtual"><scope>DecodeBounds</scope><name>set</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

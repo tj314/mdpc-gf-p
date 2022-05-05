@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="utils_8hpp" kind="file" language="C++">
+    <compoundname>utils.hpp</compoundname>
+    <includedby refid="code_8hpp" local="yes">code.hpp</includedby>
+    <includedby refid="random_8hpp" local="yes">random.hpp</includedby>
+    <invincdepgraph>
+      <node id="4">
+        <label>random.hpp</label>
+        <link refid="random_8hpp_source"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>code.hpp</label>
+        <link refid="code_8hpp_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>utils.hpp</label>
+        <link refid="utils_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>protocol.hpp</label>
+        <link refid="protocol_8hpp_source"/>
+      </node>
+    </invincdepgraph>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="utils_8hpp_1aad1eb0be6c6786670546fac886864de8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto floor_mod</definition>
+        <argsstring>(long num, long modulo) -&gt; long</argsstring>
+        <name>floor_mod</name>
+        <param>
+          <type>long</type>
+          <declname>num</declname>
+        </param>
+        <param>
+          <type>long</type>
+          <declname>modulo</declname>
+        </param>
+        <briefdescription>
+<para>Calculate remainder of integer division num/modulo. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function guarantees the following behavior:<itemizedlist>
+<listitem><para>if num &gt;= 0 and modulo &gt; 0 then floor_mod(num, modulo) = num % modulo</para>
+</listitem><listitem><para>if num &lt; 0 and modulo &gt; 0 then floor_mod(num, modulo) = (num % modulo) + modulo For example:</para>
+</listitem><listitem><para>floor_mod(7, 3) = 7 % 3 = 1</para>
+</listitem><listitem><para>floor_mod(-7, 3) = (-7 % 3) + 3 = -1 + 3 = 2</para>
+</listitem></itemizedlist>
+</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>num</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A number. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>modulo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A positive modulus. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The positive remainder of integer division num/modulo. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/utils.hpp" line="18" column="6" declfile="/home/tj/Dokumenty/timak/mdpc-gf-p/include/utils.hpp" declline="18" declcolumn="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#ifndef<sp/>MCELIECE_QCMDPC_GF_P_UTILS_HPP</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MCELIECE_QCMDPC_GF_P_UTILS_HPP</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>floor_mod(</highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>num,<sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>modulo)<sp/>-&gt;<sp/>long;</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+    </programlisting>
+    <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/utils.hpp"/>
+  </compounddef>
+</doxygen>

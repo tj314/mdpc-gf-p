@@ -1,0 +1,234 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="classProtocol" kind="class" language="C++" prot="public">
+    <compoundname>Protocol</compoundname>
+    <includes refid="protocol_8hpp" local="no">protocol.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classProtocol_1a5821a36ee0006093f6cf4ae3bb4da415" prot="private" static="no" mutable="no">
+        <type>unsigned</type>
+        <definition>unsigned Protocol::q</definition>
+        <argsstring></argsstring>
+        <name>q</name>
+        <briefdescription>
+<para>Parameters q and k of the MDPC GF(p) cryptosystem. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ref refid="classCode" kindref="compound">Code</ref> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/protocol.hpp" line="25" column="14" bodyfile="/home/tj/Dokumenty/timak/mdpc-gf-p/include/protocol.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classProtocol_1a0d25c8fe68856ead288b814591265720" prot="private" static="no" mutable="no">
+        <type>unsigned</type>
+        <definition>unsigned Protocol::k</definition>
+        <argsstring></argsstring>
+        <name>k</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/protocol.hpp" line="25" column="16" bodyfile="/home/tj/Dokumenty/timak/mdpc-gf-p/include/protocol.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classProtocol_1aa7122b7da5b3cb609a9b522c15c8ad1f" prot="private" static="no" mutable="no">
+        <type><ref refid="classCode" kindref="compound">Code</ref></type>
+        <definition>Code Protocol::c</definition>
+        <argsstring></argsstring>
+        <name>c</name>
+        <briefdescription>
+<para>Instance of MDPC GF(p) used for encoding and decoding. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ref refid="classCode" kindref="compound">Code</ref> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/protocol.hpp" line="31" column="10" bodyfile="/home/tj/Dokumenty/timak/mdpc-gf-p/include/protocol.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classProtocol_1a31704b7046e529d7947657eb142d1cef" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>Protocol::Protocol</definition>
+        <argsstring>(unsigned q, unsigned k)</argsstring>
+        <name>Protocol</name>
+        <param>
+          <type>unsigned</type>
+          <declname>q</declname>
+        </param>
+        <param>
+          <type>unsigned</type>
+          <declname>k</declname>
+        </param>
+        <briefdescription>
+<para>Generate a new MDPC GF(p) instance with the given q and k settings. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>To achieve the best possible DFR value, q should be a power of 2 and k should be a prime. It is not required, however.</para>
+<para><simplesect kind="see"><para><ref refid="classCode" kindref="compound">Code</ref></para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>q</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Parameter q, ideally a power of 2. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>k</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Parameter k, ideally a prime. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/protocol.hpp" line="44" column="5" bodyfile="/home/tj/Dokumenty/timak/mdpc-gf-p/include/protocol.hpp" bodystart="44" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="function" id="classProtocol_1af17ceff9d90017d56e01d12b53b35237" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto Protocol::encrypt</definition>
+        <argsstring>(const vector&lt; unsigned &gt; &amp;plaintext, bool verbose=false) -&gt; optional&lt; vector&lt; unsigned &gt;&gt;</argsstring>
+        <name>encrypt</name>
+        <param>
+          <type>const vector&lt; unsigned &gt; &amp;</type>
+          <declname>plaintext</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>verbose</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>Encrypt a plaintext. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Encryption is achieved as follows:<orderedlist>
+<listitem><para>Plaintext is encoded using the generated <ref refid="classCode" kindref="compound">Code</ref> instance.</para>
+</listitem><listitem><para>An error vector is generated.</para>
+</listitem><listitem><para>Encoded plaintext is summed with the error vector. Encryption will fail if and only if the plaintext length is not k. Ciphertext is of length 2*k.</para>
+</listitem></orderedlist>
+</para>
+<para><simplesect kind="see"><para><ref refid="classCode_1a2ac84bd2a4ba29af23a838386c0f9edd" kindref="member">Code::encode(const vector&lt;unsigned&gt;&amp; plaintext)</ref> </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>plaintext</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A vector of length k with values from Z_q. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>verbose</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Whether to print error messages. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>On success, return ciphertext. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/protocol.hpp" line="61" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classProtocol_1af6216872f0ab2e83dcabd5f419160a4d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto Protocol::decrypt</definition>
+        <argsstring>(const vector&lt; unsigned &gt; &amp;ciphertext, unsigned num_iterations=25, bool verbose=false) -&gt; optional&lt; vector&lt; unsigned &gt;&gt;</argsstring>
+        <name>decrypt</name>
+        <param>
+          <type>const vector&lt; unsigned &gt; &amp;</type>
+          <declname>ciphertext</declname>
+        </param>
+        <param>
+          <type>unsigned</type>
+          <declname>num_iterations</declname>
+          <defval>25</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>verbose</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>Decrypt a ciphertext. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Decryption is achieved as follows:<orderedlist>
+<listitem><para>Ciphertext is decoded using the generated <ref refid="classCode" kindref="compound">Code</ref> instance to obtain the error vector used in encryption.</para>
+</listitem><listitem><para>The error vector is subtracted from the ciphertext.</para>
+</listitem><listitem><para>Plaintext is read as the first k positions from ciphertext. Decryption will fail if:</para>
+</listitem></orderedlist>
+<itemizedlist>
+<listitem><para>Ciphertext is not of length 2*k.</para>
+</listitem><listitem><para>Decoding fails.</para>
+</listitem></itemizedlist>
+</para>
+<para><simplesect kind="see"><para><ref refid="classCode_1a48dcaf1a4bdf68ec6ed556162ccdc50a" kindref="member">Code::decode(const vector&lt;unsigned&gt;&amp; ciphertext, unsigned num_iterations)</ref> </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ciphertext</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A vector of length 2*k with values from Z_q. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>num_iterations</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of iterations used in the decoding step. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>verbose</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Whether to print error messages. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>On success, return plaintext. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/protocol.hpp" line="80" column="10"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para><ref refid="classProtocol" kindref="compound">Protocol</ref> class holds an instance of MDPC GF(p) cryptosystem and allows for encryption and decryption using this instance. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/protocol.hpp" line="19" column="1" bodyfile="/home/tj/Dokumenty/timak/mdpc-gf-p/include/protocol.hpp" bodystart="19" bodyend="81"/>
+    <listofallmembers>
+      <member refid="classProtocol_1aa7122b7da5b3cb609a9b522c15c8ad1f" prot="private" virt="non-virtual"><scope>Protocol</scope><name>c</name></member>
+      <member refid="classProtocol_1af6216872f0ab2e83dcabd5f419160a4d" prot="public" virt="non-virtual"><scope>Protocol</scope><name>decrypt</name></member>
+      <member refid="classProtocol_1af17ceff9d90017d56e01d12b53b35237" prot="public" virt="non-virtual"><scope>Protocol</scope><name>encrypt</name></member>
+      <member refid="classProtocol_1a0d25c8fe68856ead288b814591265720" prot="private" virt="non-virtual"><scope>Protocol</scope><name>k</name></member>
+      <member refid="classProtocol_1a31704b7046e529d7947657eb142d1cef" prot="public" virt="non-virtual"><scope>Protocol</scope><name>Protocol</name></member>
+      <member refid="classProtocol_1a5821a36ee0006093f6cf4ae3bb4da415" prot="private" virt="non-virtual"><scope>Protocol</scope><name>q</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

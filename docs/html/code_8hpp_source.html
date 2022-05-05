@@ -121,31 +121,28 @@ $(function() {
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            tmp = 0;</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> j = 0; j &lt; k_value; ++j) {</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                tmp += (h0.at(floor_mod(i + j, k_value)) * ((long)vec.at(j)));</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;            }</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;            tmp = floor_mod(tmp, q_value);</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> j = 0; j &lt; k_value; ++j) {</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;                tmp += (h1.at(floor_mod(i + j, k_value)) * ((long)vec.at(k_value + j)));</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;            }</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            tmp = floor_mod(tmp, q_value);</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;            syndrome.push_back((<span class="keywordtype">unsigned</span>)tmp);</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        }</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="keywordflow">return</span> syndrome;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    }</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keyword">auto</span> decide(vector&lt;int&gt;&amp; error_vector, <span class="keyword">const</span> vector&lt;unsigned&gt;&amp; syndrome) <span class="keyword">const</span> -&gt; void;</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    <span class="keyword">auto</span> transform(vector&lt;int&gt;&amp; error_vector) <span class="keyword">const</span> -&gt; void;</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00142"></a><span class="lineno"><a class="line" href="classCode.html#ab060cc77a2e7dbd74df84e7774c51db1">  142</a></span>&#160;    <a class="code" href="classCode.html#ab060cc77a2e7dbd74df84e7774c51db1">Code</a>(<span class="keywordtype">unsigned</span> q, <span class="keywordtype">unsigned</span> k);</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160; </div>
-<div class="line"><a name="l00161"></a><span class="lineno"><a class="line" href="classCode.html#a7319dea60fc127aba6408847f4efbf19">  161</a></span>&#160;    <span class="keyword">auto</span> <a class="code" href="classCode.html#a7319dea60fc127aba6408847f4efbf19">init_keys</a>() -&gt; void;</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160; </div>
-<div class="line"><a name="l00172"></a><span class="lineno"><a class="line" href="classCode.html#a2ac84bd2a4ba29af23a838386c0f9edd">  172</a></span>&#160;    <span class="keyword">auto</span> <a class="code" href="classCode.html#a2ac84bd2a4ba29af23a838386c0f9edd">encode</a>(<span class="keyword">const</span> vector&lt;unsigned&gt;&amp; vec) -&gt; vector&lt;unsigned&gt;;</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160; </div>
-<div class="line"><a name="l00190"></a><span class="lineno"><a class="line" href="classCode.html#a48dcaf1a4bdf68ec6ed556162ccdc50a">  190</a></span>&#160;    <span class="keyword">auto</span> <a class="code" href="classCode.html#a48dcaf1a4bdf68ec6ed556162ccdc50a">decode</a>(<span class="keyword">const</span> vector&lt;unsigned&gt;&amp; vec, <span class="keywordtype">unsigned</span> num_iterations) -&gt; optional&lt;vector&lt;int&gt;&gt;;</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;};</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160; </div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                tmp += (h1.at(floor_mod(i + j, k_value)) * ((<span class="keywordtype">long</span>)vec.at(k_value + j)));</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;            }</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            tmp = floor_mod(tmp, q_value);</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            syndrome.push_back((<span class="keywordtype">unsigned</span>)tmp);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        }</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <span class="keywordflow">return</span> syndrome;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    }</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <span class="keyword">auto</span> decide(vector&lt;int&gt;&amp; error_vector, <span class="keyword">const</span> vector&lt;unsigned&gt;&amp; syndrome) <span class="keyword">const</span> -&gt; void;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    <span class="keyword">auto</span> transform(vector&lt;int&gt;&amp; error_vector) <span class="keyword">const</span> -&gt; void;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00139"></a><span class="lineno"><a class="line" href="classCode.html#ab060cc77a2e7dbd74df84e7774c51db1">  139</a></span>&#160;    <a class="code" href="classCode.html#ab060cc77a2e7dbd74df84e7774c51db1">Code</a>(<span class="keywordtype">unsigned</span> q, <span class="keywordtype">unsigned</span> k);</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160; </div>
+<div class="line"><a name="l00158"></a><span class="lineno"><a class="line" href="classCode.html#a7319dea60fc127aba6408847f4efbf19">  158</a></span>&#160;    <span class="keyword">auto</span> <a class="code" href="classCode.html#a7319dea60fc127aba6408847f4efbf19">init_keys</a>() -&gt; void;</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160; </div>
+<div class="line"><a name="l00169"></a><span class="lineno"><a class="line" href="classCode.html#a2ac84bd2a4ba29af23a838386c0f9edd">  169</a></span>&#160;    <span class="keyword">auto</span> <a class="code" href="classCode.html#a2ac84bd2a4ba29af23a838386c0f9edd">encode</a>(<span class="keyword">const</span> vector&lt;unsigned&gt;&amp; vec) -&gt; vector&lt;unsigned&gt;;</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160; </div>
+<div class="line"><a name="l00187"></a><span class="lineno"><a class="line" href="classCode.html#a48dcaf1a4bdf68ec6ed556162ccdc50a">  187</a></span>&#160;    <span class="keyword">auto</span> <a class="code" href="classCode.html#a48dcaf1a4bdf68ec6ed556162ccdc50a">decode</a>(<span class="keyword">const</span> vector&lt;unsigned&gt;&amp; vec, <span class="keywordtype">unsigned</span> num_iterations) -&gt; optional&lt;vector&lt;int&gt;&gt;;</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;};</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160; </div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassCode_html"><div class="ttname"><a href="classCode.html">Code</a></div><div class="ttdoc">Code class is an instance of MDPC GF(p), holds matrices H and G and performs encoding and decoding.</div><div class="ttdef"><b>Definition:</b> code.hpp:48</div></div>
 <div class="ttc" id="aclassCode_html_a2ac84bd2a4ba29af23a838386c0f9edd"><div class="ttname"><a href="classCode.html#a2ac84bd2a4ba29af23a838386c0f9edd">Code::encode</a></div><div class="ttdeci">auto encode(const vector&lt; unsigned &gt; &amp;vec) -&gt; vector&lt; unsigned &gt;</div><div class="ttdoc">Encode a vector.</div></div>
 <div class="ttc" id="aclassCode_html_a48dcaf1a4bdf68ec6ed556162ccdc50a"><div class="ttname"><a href="classCode.html#a48dcaf1a4bdf68ec6ed556162ccdc50a">Code::decode</a></div><div class="ttdeci">auto decode(const vector&lt; unsigned &gt; &amp;vec, unsigned num_iterations) -&gt; optional&lt; vector&lt; int &gt;&gt;</div><div class="ttdoc">Decode a vector.</div></div>

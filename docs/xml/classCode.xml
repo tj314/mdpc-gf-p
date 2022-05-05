@@ -1,0 +1,388 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="classCode" kind="class" language="C++" prot="public">
+    <compoundname>Code</compoundname>
+    <includes refid="code_8hpp" local="no">code.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classCode_1a0dbdd9898e48950900abbb534c54b6b3" prot="private" static="no" mutable="no">
+        <type>unsigned</type>
+        <definition>unsigned Code::q_value</definition>
+        <argsstring></argsstring>
+        <name>q_value</name>
+        <briefdescription>
+<para>Parameters q and k of the MDPC GF(p) instance. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" line="53" column="14" bodyfile="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classCode_1af8bf054b3a051c3a79555ccd1cf40517" prot="private" static="no" mutable="no">
+        <type>unsigned</type>
+        <definition>unsigned Code::k_value</definition>
+        <argsstring></argsstring>
+        <name>k_value</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" line="53" column="22" bodyfile="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classCode_1a2ff1cbe49ec36c13defc4bff2a61b81a" prot="private" static="no" mutable="no">
+        <type>vector&lt; unsigned &gt;</type>
+        <definition>vector&lt;unsigned&gt; Code::h0</definition>
+        <argsstring></argsstring>
+        <name>h0</name>
+        <briefdescription>
+<para>Vectors representing polynomials h0 and h1. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>These represent H0 and H1 blocks of the matrix H. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" line="60" column="12" bodyfile="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classCode_1ae7d98d223efccdea727deeb2db3c6d57" prot="private" static="no" mutable="no">
+        <type>vector&lt; unsigned &gt;</type>
+        <definition>vector&lt;unsigned&gt; Code::h1</definition>
+        <argsstring></argsstring>
+        <name>h1</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" line="60" column="15" bodyfile="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classCode_1a4a0f2a775f03f7722f32aa5d28a44c33" prot="private" static="no" mutable="no">
+        <type>vector&lt; unsigned &gt;</type>
+        <definition>vector&lt;unsigned&gt; Code::second_block_G</definition>
+        <argsstring></argsstring>
+        <name>second_block_G</name>
+        <briefdescription>
+<para>Vector representing the first row of the second block of matrix G. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The second block should be calculated as -(h1_inv*h0)^T. Here we omit the transposition and encode accordingly. The first block of matrix G is the identity matrix and therefore does not need to be explicitly stored in a vector. Once again, encoding is modified accordingly. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" line="70" column="12" bodyfile="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classCode_1af00406b7655ec5898f4373ac4c46eaeb" prot="private" static="no" mutable="no">
+        <type><ref refid="structDecodeBounds" kindref="compound">DecodeBounds</ref></type>
+        <definition>DecodeBounds Code::bounds</definition>
+        <argsstring></argsstring>
+        <name>bounds</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+<para>An instance of <ref refid="structDecodeBounds" kindref="compound">DecodeBounds</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ref refid="structDecodeBounds" kindref="compound">DecodeBounds</ref> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" line="76" column="18" bodyfile="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="classCode_1a55b3cc17325d7d94b1e056212200ec28" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto Code::calculate_syndrome</definition>
+        <argsstring>(const vector&lt; T &gt; &amp;vec) -&gt; vector&lt; unsigned &gt;</argsstring>
+        <name>calculate_syndrome</name>
+        <param>
+          <type>const vector&lt; T &gt; &amp;</type>
+          <declname>vec</declname>
+        </param>
+        <briefdescription>
+<para>Calculate the syndrome of vector vec. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The syndrome of a vector is calculated as H*c^T or c*H^T. These produce a row or column vector. In this implementation a row vector is produced. If the vec is a codeword in the current MDPC GF(p) instance, its syndrome is a zero vector. It is nonzero otherwise. In this implementation, this method is used to calculate the syndrome of ciphertext (vector&lt;unsigned&gt;) and of error vector (vector&lt;int&gt;).</para>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Expected to be int or unsigned. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>vec</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A vector of length 2*k. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A vector of length k representing the syndrome of vec. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" line="91" column="10" bodyfile="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" bodystart="91" bodyend="104"/>
+      </memberdef>
+      <memberdef kind="function" id="classCode_1a312a05c7c16297b52c91953b3a6522ae" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto Code::decide</definition>
+        <argsstring>(vector&lt; int &gt; &amp;error_vector, const vector&lt; unsigned &gt; &amp;syndrome) const -&gt; void</argsstring>
+        <name>decide</name>
+        <param>
+          <type>vector&lt; int &gt; &amp;</type>
+          <declname>error_vector</declname>
+        </param>
+        <param>
+          <type>const vector&lt; unsigned &gt; &amp;</type>
+          <declname>syndrome</declname>
+        </param>
+        <briefdescription>
+<para>Evaluate the syndrome and update the error_vector accordingly. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Based on the value of syndrome, each position in the error vector may be incremented, decremented or remain unchanged. The detailed explanation of the logic behind this method may be found in the original paper at <ulink url="https://www.lebesgue.fr/sites/default/files/proceedings_WCC/WCC_2019_paper_32.pdf">https://www.lebesgue.fr/sites/default/files/proceedings_WCC/WCC_2019_paper_32.pdf</ulink></para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>error_vector</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Error vector of length 2*k. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>syndrome</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Syndrome vector of length k. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" line="116" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classCode_1ad74f33b7a60fac984b6b7ccedb4eeee2" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto Code::transform</definition>
+        <argsstring>(vector&lt; int &gt; &amp;error_vector) const -&gt; void</argsstring>
+        <name>transform</name>
+        <param>
+          <type>vector&lt; int &gt; &amp;</type>
+          <declname>error_vector</declname>
+        </param>
+        <briefdescription>
+<para>Update the error vector so that it only contains values -1, 0 or 1. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The call to the decide method may have caused the error vector to contain values -2 and 2. If this is the case, each occurrence of -2 is replaced by 1 and each occurrence of 2 is replaced by -1.</para>
+<para><simplesect kind="see"><para>Code::decide(vector&lt;int&gt;&amp; error_vector, const vector&lt;unsigned&gt;&amp; syndrome) </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>error_vector</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Error vector of length 2*k. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" line="127" column="10"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classCode_1ab060cc77a2e7dbd74df84e7774c51db1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Code::Code</definition>
+        <argsstring>(unsigned q, unsigned k)</argsstring>
+        <name>Code</name>
+        <param>
+          <type>unsigned</type>
+          <declname>q</declname>
+        </param>
+        <param>
+          <type>unsigned</type>
+          <declname>k</declname>
+        </param>
+        <briefdescription>
+<para>Create a new instance of MDPC GF(p) and generate keys. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>If the parameter q is not a power of 2, one may expect suboptimal performance of the decoder. In such scenario the decoding will fail with higher frequency. This may be used to test the decoder&apos;s performance, however. Hence such setting of the q is not disallowed.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>q</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Parameter q, ideally a power of 2. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>k</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Parameter k, ideally a prime. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" line="139" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classCode_1a7319dea60fc127aba6408847f4efbf19" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto Code::init_keys</definition>
+        <argsstring>() -&gt; void</argsstring>
+        <name>init_keys</name>
+        <briefdescription>
+<para>Generate keys. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The private key is the matrix H. The public kes is the matrix G. Matrix H consists of circulant blocks H0 and H1. These are represented by polynomials h0 and h1 respectively. Matrix G consists of one identity matrix block and a one circulant block. The keys are generated as follows:<orderedlist>
+<listitem><para>Randomly generate h0.</para>
+</listitem><listitem><para>Randomly generate h1 such that it is invertible:<orderedlist>
+<listitem><para>Randomly generate h1 in Z_q/(x^k -1).</para>
+</listitem><listitem><para>Convert it to Q.</para>
+</listitem><listitem><para>Calculate the inverse in Q.</para>
+</listitem><listitem><para>Convert the inverse to Z_q/(x^k -1).</para>
+</listitem></orderedlist>
+</para>
+</listitem><listitem><para>Calculate second block of matrix G as -(h1_inv*h0).</para>
+</listitem></orderedlist>
+</para>
+<para><simplesect kind="see"><para>Random::poly_internal(unsigned k, unsigned add_to_first = 0) </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" line="158" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classCode_1a2ac84bd2a4ba29af23a838386c0f9edd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto Code::encode</definition>
+        <argsstring>(const vector&lt; unsigned &gt; &amp;vec) -&gt; vector&lt; unsigned &gt;</argsstring>
+        <name>encode</name>
+        <param>
+          <type>const vector&lt; unsigned &gt; &amp;</type>
+          <declname>vec</declname>
+        </param>
+        <briefdescription>
+<para>Encode a vector. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The vector vec is encoded as vec*G. The resulting vector is of length 2*k and its first k positions are equal to vec. This is because the first block of G is identity matrix.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>vec</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A vector in Z_q of length k. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>An encoded vectpr in Z_q of length 2*k. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" line="169" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classCode_1a48dcaf1a4bdf68ec6ed556162ccdc50a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto Code::decode</definition>
+        <argsstring>(const vector&lt; unsigned &gt; &amp;vec, unsigned num_iterations) -&gt; optional&lt; vector&lt; int &gt;&gt;</argsstring>
+        <name>decode</name>
+        <param>
+          <type>const vector&lt; unsigned &gt; &amp;</type>
+          <declname>vec</declname>
+        </param>
+        <param>
+          <type>unsigned</type>
+          <declname>num_iterations</declname>
+        </param>
+        <briefdescription>
+<para>Decode a vector. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Decoding the vector means finding the used error vector. In the beginning, current error vector value is set to 0 and the vec&apos;s syndrome is calculated. If it is zero, decoding successfully ends and zero initialized error vector is returned. Otherwise, the vector is decoded iteratively up to num_iterations iterations. In each:<orderedlist>
+<listitem><para>The current error vector is updated using the decide method and transformed using the transform method.</para>
+</listitem><listitem><para>The syndrome of the current error vector is calculated.</para>
+</listitem><listitem><para>This syndrome is subtracted from vec&apos;s syndrome. If the result is a zero vector, the decoding successfully ends and the current error vector is returned. In case all iterations finnish and the error vector is not returned, the decoding is considered a failure.</para>
+</listitem></orderedlist>
+</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>vec</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A vector in Z_q of length 2*k. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>num_iterations</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of iterations. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>On success, return found error vector. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" line="187" column="10"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para><ref refid="classCode" kindref="compound">Code</ref> class is an instance of MDPC GF(p), holds matrices H and G and performs encoding and decoding. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" line="48" column="1" bodyfile="/home/tj/Dokumenty/timak/mdpc-gf-p/include/code.hpp" bodystart="48" bodyend="188"/>
+    <listofallmembers>
+      <member refid="classCode_1af00406b7655ec5898f4373ac4c46eaeb" prot="private" virt="non-virtual"><scope>Code</scope><name>bounds</name></member>
+      <member refid="classCode_1a55b3cc17325d7d94b1e056212200ec28" prot="private" virt="non-virtual"><scope>Code</scope><name>calculate_syndrome</name></member>
+      <member refid="classCode_1ab060cc77a2e7dbd74df84e7774c51db1" prot="public" virt="non-virtual"><scope>Code</scope><name>Code</name></member>
+      <member refid="classCode_1a312a05c7c16297b52c91953b3a6522ae" prot="private" virt="non-virtual"><scope>Code</scope><name>decide</name></member>
+      <member refid="classCode_1a48dcaf1a4bdf68ec6ed556162ccdc50a" prot="public" virt="non-virtual"><scope>Code</scope><name>decode</name></member>
+      <member refid="classCode_1a2ac84bd2a4ba29af23a838386c0f9edd" prot="public" virt="non-virtual"><scope>Code</scope><name>encode</name></member>
+      <member refid="classCode_1a2ff1cbe49ec36c13defc4bff2a61b81a" prot="private" virt="non-virtual"><scope>Code</scope><name>h0</name></member>
+      <member refid="classCode_1ae7d98d223efccdea727deeb2db3c6d57" prot="private" virt="non-virtual"><scope>Code</scope><name>h1</name></member>
+      <member refid="classCode_1a7319dea60fc127aba6408847f4efbf19" prot="public" virt="non-virtual"><scope>Code</scope><name>init_keys</name></member>
+      <member refid="classCode_1af8bf054b3a051c3a79555ccd1cf40517" prot="private" virt="non-virtual"><scope>Code</scope><name>k_value</name></member>
+      <member refid="classCode_1a0dbdd9898e48950900abbb534c54b6b3" prot="private" virt="non-virtual"><scope>Code</scope><name>q_value</name></member>
+      <member refid="classCode_1a4a0f2a775f03f7722f32aa5d28a44c33" prot="private" virt="non-virtual"><scope>Code</scope><name>second_block_G</name></member>
+      <member refid="classCode_1ad74f33b7a60fac984b6b7ccedb4eeee2" prot="private" virt="non-virtual"><scope>Code</scope><name>transform</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
